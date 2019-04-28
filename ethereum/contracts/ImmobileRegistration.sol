@@ -5,6 +5,7 @@ import "./lib/Allowance.sol";
 contract ImmobileRegistration is Allowance{
     string date;
     string registrationNumber;
+    // Registry office signature
     address signature;
     
     // Immobile information
@@ -12,6 +13,11 @@ contract ImmobileRegistration is Allowance{
     string place;
     string area;
     string cidade;
+    uint value;
+
+    //OldOwner
+    string oldName;
+    address oldOwner;
     
     //Owner
     string name;
