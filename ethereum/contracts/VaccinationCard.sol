@@ -19,7 +19,7 @@ contract VaccinationCard is Allowance{
     uint private vaccinesCount;
     uint private vaccinesLogCount;
 
-    constructor(address _owner) public Allowance(msg.sender, _owner){
+    constructor(address _creator, address _owner) public Allowance(_creator, _owner){
         vaccinesLogCount = 0;
         vaccinesCount = 0;
         vaccineNamesCount = 0;
@@ -77,6 +77,52 @@ contract VaccinationCard is Allowance{
     function getVaccinesCount() public view canSee returns(uint){
         return vaccinesCount;
     }
+}
 
-
+contract VaccinationController{
+    /* DEFINITIONS */
+    address organization;
+    mapping(address => bool) clients;
+    mapping(address => address[]) cards;
+    
+    modifier onlyOrganization{
+        require(msg.sender == organization);
+        _;
+    }
+    
+    modifier shouldBeClient(address _client){
+        require(clients[_client]);
+        _;
+    }
+    
+    constructor() public{
+        organization = msg.sender;
+    }
+    
+    function addVaccinationCard(address _owner) public onlyOrganization{
+        address vac = new VaccinationCard(msg.sender, _owner);
+        address[] storage vacs = cards[_owner];
+        vacs.push(vac);
+        clients[_owner] = true;
+    }
+    
+    function listVaccinationCards(address _owner) public view onlyOrganization shouldBeClient(_owner) returns(address[]){
+        return cards[_owner];
+    }
+    
+    function isOrganization(address _reg) public view returns(bool){
+        return (_reg == organization);
+    }
+    
+    function imOrganization() public view returns(bool){
+        return (msg.sender == organization);
+    }
+    
+    function isClient(address _client) public view returns(bool){
+        return (clients[_client]);
+    }
+    
+    function imClient() public view returns(bool){
+        return (clients[msg.sender]);
+    }
 }
