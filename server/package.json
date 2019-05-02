@@ -1,0 +1,25 @@
+{
+  "name": "smartcontracts-for-egov",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "ganache-cli": "^6.2.3",
+    "mocha": "^5.2.0",
+    "mysql": "^2.16.0",
+    "solc": "^0.4.23",
+    "truffle-hdwallet-provider": "0.0.3",
+    "typedarray-to-buffer": "^3.1.5",
+    "web3": "^1.0.0-beta.35",
+    "yaeti": "^0.0.6"
+  },
+  "scripts": {
+    "server": "node ./app.js",
+    "compile": "node ethereum/compileAll.js",
+    "deploy": "node ethereum/deploy.js"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  }
+}
