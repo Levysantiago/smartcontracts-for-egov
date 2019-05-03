@@ -15,6 +15,7 @@ const deploy = async () => {
    */
 
   // Create a new contract and define ABI access
+  console.log("Deploying Vaccine Controller");
   let result = await new web3.eth.Contract(
     JSON.parse(vaccine_controller.interface)
   )
@@ -32,6 +33,7 @@ const deploy = async () => {
    * Deploying Enrollment Controller
    */
 
+  console.log("Deploying Enrollment Controller");
   // Create a new contract and define ABI access
   result = await new web3.eth.Contract(
     JSON.parse(enrollment_controller.interface)
@@ -49,7 +51,7 @@ const deploy = async () => {
   /**
    * Deploying Immobile Controller
    */
-
+  console.log("Deploying Immobile Controller");
   // Create a new contract and define ABI access
   result = await new web3.eth.Contract(
     JSON.parse(immobile_controller.interface)

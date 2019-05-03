@@ -107,7 +107,9 @@ contract EnrollmentController is ShiftConfig{
     /* DEFINITIONS */
     address collegiate;
     mapping(address => bool) students;
-    mapping(address => address) documents;
+    mapping(address => uint) indexes;
+    address[] documents;
+    uint counter;
 
     /* MODIFIERS */
     modifier onlyCollegiate{
@@ -130,20 +132,28 @@ contract EnrollmentController is ShiftConfig{
     /* Construtor */
     constructor() public{
         collegiate = msg.sender;
+        counter = 0;
     }
     
     /* Setters */
     function addEnrollment(address _studentAddress, string _name, string _course, string _ingress, string _period, Shift _shift) public onlyCollegiate{
         address newEnrollment = new EnrollmentProof(_studentAddress, _name, _course, _ingress, _period, _shift);
-        documents[_studentAddress] = newEnrollment;
+        indexes[_studentAddress] = counter;
+        documents.push(newEnrollment);
+        counter++;
         students[_studentAddress] = true;
     }
 
     //function addSubject(address doc, )
     
-    function getEnrollment(address _studentAddress) public view onlyCollegiate returns(EnrollmentProof){
-        EnrollmentProof doc = EnrollmentProof(documents[_studentAddress]);
+    function getEnrollment(address _studentAddress) public view onlyCollegiate returns(address){
+        require(students[_studentAddress], "It's not a student.");
+        address doc = documents[ indexes[_studentAddress] ];
         return doc;
+    }
+
+    function listEnrollment() public view onlyCollegiate returns(address[]){
+        return documents;
     }
     
     /* Getters */

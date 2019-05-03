@@ -15,7 +15,7 @@
     "yaeti": "^0.0.6"
   },
   "scripts": {
-    "server": "node ./app.js",
+    "server": "node ./src/app.js",
     "compile": "node ethereum/compileAll.js",
     "deploy": "node ethereum/deploy.js"
   },
