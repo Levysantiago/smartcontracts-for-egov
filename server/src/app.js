@@ -3,10 +3,10 @@ const app = express();
 const port = 5000;
 let bodyParser = require("body-parser");
 require("dotenv").config();
-const httpstatus = require("./lib/HttpStatus");
 const {
   enrollmentcontroller
 } = require("../ethereum/instances/enrollmentcontroller");
+const enrollmentproof = require("../ethereum/instances/enrollmentproof");
 
 const { MTMSK_ACCOUNT, GAS } = process.env;
 
@@ -14,6 +14,7 @@ const { MTMSK_ACCOUNT, GAS } = process.env;
 app.use(bodyParser.json());
 
 app.post("/enrollment/create", async (req, res) => {
+  console.log(req.body);
   const json = {
     student: "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8398",
     name: "Carlos",
@@ -39,10 +40,10 @@ app.post("/enrollment/create", async (req, res) => {
     const enrollmentaddress = await enrollmentcontroller.methods
       .getEnrollment(json.student)
       .call({ from: MTMSK_ACCOUNT });
-    res.end(enrollmentaddress);
+    res.sendStatus(200);
   } catch (e) {
     console.log(e);
-    res.end("204");
+    res.sendStatus(204);
   }
 });
 
@@ -54,6 +55,36 @@ app.get("/enrollment/list", async (req, res) => {
     let json = {
       list: enrollments
     };
+    res.send(json);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    contract: 0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A
+}
+*/
+app.post("/enrollment/info", async (req, res) => {
+  if (!req.body || !req.body.contract) {
+    res.sendStatus(400);
+    return;
+  }
+  const contractAddress = req.body.contract;
+  try {
+    const instance = enrollmentproof.getInstance(contractAddress);
+    let info = await instance.methods.getInfo().call({ from: MTMSK_ACCOUNT });
+    let json = {
+      student: info["0"],
+      name: info["1"],
+      course: info["2"],
+      ingress: info["3"],
+      period: info["4"],
+      shift: info["5"]
+    };
+    console.log(json);
     res.send(json);
   } catch (e) {
     console.log(e);

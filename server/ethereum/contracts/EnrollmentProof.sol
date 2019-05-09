@@ -64,7 +64,7 @@ contract EnrollmentProof is ShiftConfig, Allowance{
     string[] subjects;
     uint subjectsCount;
     
-    constructor(address _student, string _name, string _course, string _ingress, string _period, Shift _shift) public Allowance(msg.sender, _student){
+    constructor(address _student, address _creator, string _name, string _course, string _ingress, string _period, Shift _shift) public Allowance(_creator, _student){
         name = _name;
         course = _course;
         ingress = _ingress;
@@ -99,6 +99,10 @@ contract EnrollmentProof is ShiftConfig, Allowance{
 
     function getShift() public view canSee returns(Shift){
         return shift;
+    }
+
+    function getInfo() public view canSee returns(address, string, string, string, string, Shift){
+        return (owner, name, course, ingress, period, shift);
     }
 }
 
@@ -137,7 +141,7 @@ contract EnrollmentController is ShiftConfig{
     
     /* Setters */
     function addEnrollment(address _studentAddress, string _name, string _course, string _ingress, string _period, Shift _shift) public onlyCollegiate{
-        address newEnrollment = new EnrollmentProof(_studentAddress, _name, _course, _ingress, _period, _shift);
+        address newEnrollment = new EnrollmentProof(_studentAddress, msg.sender, _name, _course, _ingress, _period, _shift);
         indexes[_studentAddress] = counter;
         documents.push(newEnrollment);
         counter++;
