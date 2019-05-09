@@ -17,15 +17,18 @@ class App extends Component {
       period: "",
       shift: ""
     },
-    loader: ""
+    loader: "",
+    loaderMsg: ""
   };
 
   async componentDidMount() {
     const account = await web3.eth.getAccounts();
+    this.loaderOn("Listando matrículas");
     this.setState({
       actualAccount: account[0]
     });
     await this.updateEnrollmentList();
+    this.loaderOff();
   }
 
   updateEnrollmentList = async () => {
@@ -48,7 +51,7 @@ class App extends Component {
   };
 
   onClick = async () => {
-    this.setState({ loader: "active" });
+    this.loaderOn("Adicionando nova matrícula");
     window.M.toast({ html: "Dados enviados" });
     try {
       let response = await fetch("/enrollment/create", {
@@ -65,13 +68,28 @@ class App extends Component {
         window.M.toast({ html: "Erro ao enviar dados" });
       }
       await this.updateEnrollmentList();
-      this.setState({ loader: "" });
+      this.loaderOff();
     } catch (e) {
       console.error(e.message);
     }
   };
+
+  loaderOn = msg => {
+    this.setState({ loader: "active", loaderMsg: msg });
+  };
+
+  loaderOff = () => {
+    this.setState({ loader: "", loaderMsg: "" });
+  };
+
   render() {
-    const { enrollments, enrollment, actualAccount, loader } = this.state;
+    const {
+      enrollments,
+      enrollment,
+      actualAccount,
+      loader,
+      loaderMsg
+    } = this.state;
     if (actualAccount) {
       return (
         <div className="App">
@@ -83,7 +101,7 @@ class App extends Component {
               onChange={this.onChange}
             />
             <ListCard title="Matrículas" list={enrollments} />
-            <Loader state={loader} />
+            <Loader state={loader} msg={loaderMsg} />
           </div>
         </div>
       );

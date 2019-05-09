@@ -3,9 +3,10 @@ import React, { Component } from "react";
 class Loader extends Component {
   render() {
     // "active" to turn on
-    const { state } = this.props;
+    const { state, msg } = this.props;
     return (
       <div className="col s12">
+        <label className="col s12">{msg}</label>
         <div className={"preloader-wrapper small " + state}>
           <div className="spinner-layer spinner-green-only">
             <div className="circle-clipper left">
