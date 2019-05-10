@@ -9,6 +9,7 @@ class App extends Component {
   state = {
     enrollments: [],
     actualAccount: "",
+    edit: false,
     enrollment: {
       student: "",
       name: "",
@@ -50,6 +51,39 @@ class App extends Component {
     //console.log(this.state.enrollment);
   };
 
+  onEnrollmentClick = async event => {
+    let json = {
+      contract: event.target.innerHTML
+    };
+    try {
+      this.loaderOn("Obtendo informações");
+      let response = await fetch("/enrollment/info", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status !== 204) {
+        let info = await response.json();
+        window.M.toast({ html: "Informações retornadas" });
+        console.log(info);
+        this.setState({ enrollment: info, edit: true });
+      } else {
+        window.M.toast({ html: "Erro ao enviar dados" });
+      }
+    } catch (e) {
+      console.error(e.message);
+    }
+    this.loaderOff();
+  };
+
+  onEdit = async () => {
+    console.log(this.state.enrollment);
+    this.setState({ edit: false });
+  };
+
   onClick = async () => {
     this.loaderOn("Adicionando nova matrícula");
     window.M.toast({ html: "Dados enviados" });
@@ -85,6 +119,7 @@ class App extends Component {
   render() {
     const {
       enrollments,
+      edit,
       enrollment,
       actualAccount,
       loader,
@@ -96,11 +131,17 @@ class App extends Component {
           <div className="container row">
             <label className="col s12">Account: {actualAccount}</label>
             <EnrollmentForm
-              newEnrollment={enrollment}
               onClick={this.onClick}
+              onEdit={this.onEdit}
               onChange={this.onChange}
+              edit={edit}
+              enrollment={enrollment}
             />
-            <ListCard title="Matrículas" list={enrollments} />
+            <ListCard
+              title="Matrículas"
+              list={enrollments}
+              onClick={this.onEnrollmentClick}
+            />
             <Loader state={loader} msg={loaderMsg} />
           </div>
         </div>

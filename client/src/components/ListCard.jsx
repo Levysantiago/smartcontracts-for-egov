@@ -9,7 +9,7 @@ class ListCard extends Component {
       padding: 10
     };
 
-    const { title, list } = this.props;
+    const { title, list, onClick } = this.props;
     let i = 0;
     return (
       <div className="col s12 m6">
@@ -20,7 +20,9 @@ class ListCard extends Component {
               {list.map(text => (
                 <div key={i++} className="card-panel white">
                   <div className="black-text">
-                    <label className="black-text">{text}</label>
+                    <a href="javascript:void(0)" onClick={onClick}>
+                      {text}
+                    </a>
                   </div>
                 </div>
               ))}

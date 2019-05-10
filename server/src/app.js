@@ -15,14 +15,19 @@ app.use(bodyParser.json());
 
 app.post("/enrollment/create", async (req, res) => {
   console.log(req.body);
-  const json = {
+  const json = req.body;
+  if (!json || !json.student) {
+    res.sendStatus(400);
+    return;
+  }
+  /*const json = {
     student: "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8398",
     name: "Carlos",
     course: "CIC",
     ingress: "20151",
     period: "20191",
     shift: 3
-  };
+  };*/
   try {
     await enrollmentcontroller.methods
       .addEnrollment(
@@ -74,6 +79,7 @@ app.post("/enrollment/info", async (req, res) => {
   }
   const contractAddress = req.body.contract;
   try {
+    console.log(contractAddress);
     const instance = enrollmentproof.getInstance(contractAddress);
     let info = await instance.methods.getInfo().call({ from: MTMSK_ACCOUNT });
     let json = {
