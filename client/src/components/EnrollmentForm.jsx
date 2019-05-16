@@ -6,6 +6,16 @@ class EnrollmentForm extends Component {
     input.className = "active";
   };
 
+  resetSelect = select => {
+    select.value = "1";
+  };
+
+  componentDidMount = () => {
+    let elems = document.querySelectorAll("select");
+    let options = document.querySelectorAll("option");
+    window.M.FormSelect.init(elems, options);
+  };
+
   printTitle = edit => {
     if (edit) {
       return <span className="card-title">Editar Matrícula</span>;
@@ -146,16 +156,18 @@ class EnrollmentForm extends Component {
             </div>
 
             <div className="input-field col s6">
-              <input
+              <select
                 id="shift"
-                type="text"
-                className="validate"
-                onChange={onChange.bind(this)}
                 name="shift"
-              />
-              <label className="active" htmlFor="shift">
-                Turno
-              </label>
+                value="1"
+                onChange={onChange.bind(this)}
+              >
+                <option value="1">Matutino</option>
+                <option value="2">Vespertino</option>
+                <option value="3">Noturno</option>
+                <option value="4">Integral</option>
+              </select>
+              <label>Materialize Select</label>
             </div>
 
             <div className="input-field col s12">
@@ -181,7 +193,7 @@ class EnrollmentForm extends Component {
               this.resetInput(document.getElementById("course"));
               this.resetInput(document.getElementById("ingress"));
               this.resetInput(document.getElementById("period"));
-              this.resetInput(document.getElementById("shift"));
+              this.resetSelect(document.getElementById("shift"));
               this.resetInput(document.getElementById("student"));
             }}
           >
@@ -263,17 +275,13 @@ class EnrollmentForm extends Component {
             </div>
 
             <div className="input-field col s6">
-              <input
-                id="shift"
-                type="text"
-                className="validate"
-                onChange={onChange.bind(this)}
-                name="shift"
-                //value={enrollment.shift}
-              />
-              <label className="active" htmlFor="shift">
-                Turno
-              </label>
+              <select id="shift" name="shift" onChange={onChange.bind(this)}>
+                <option value="1">Matutino</option>
+                <option value="2">Vespertino</option>
+                <option value="3">Noturno</option>
+                <option value="4">Integral</option>
+              </select>
+              <label>Materialize Select</label>
             </div>
 
             <div className="input-field col s12">
@@ -300,7 +308,7 @@ class EnrollmentForm extends Component {
               this.resetInput(document.getElementById("course"));
               this.resetInput(document.getElementById("ingress"));
               this.resetInput(document.getElementById("period"));
-              this.resetInput(document.getElementById("shift"));
+              this.resetSelect(document.getElementById("shift"));
               this.resetInput(document.getElementById("student"));
             }}
           >

@@ -9,6 +9,8 @@ class ListCard extends Component {
       padding: 10
     };
 
+    const linkStyle = { fontSize: 12 };
+
     const { title, list, onClick } = this.props;
     let i = 0;
     return (
@@ -20,7 +22,11 @@ class ListCard extends Component {
               {list.map(text => (
                 <div key={i++} className="card-panel white">
                   <div className="black-text">
-                    <a href="javascript:void(0)" onClick={onClick}>
+                    <a
+                      href="javascript:void(0)"
+                      onClick={onClick}
+                      style={linkStyle}
+                    >
                       {text}
                     </a>
                   </div>

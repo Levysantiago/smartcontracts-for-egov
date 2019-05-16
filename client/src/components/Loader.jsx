@@ -5,7 +5,7 @@ class Loader extends Component {
     // "active" to turn on
     const { state, msg } = this.props;
     return (
-      <div className="col s12">
+      <div className="col s12 center">
         <label className="col s12">{msg}</label>
         <div className={"preloader-wrapper small " + state}>
           <div className="spinner-layer spinner-green-only">
