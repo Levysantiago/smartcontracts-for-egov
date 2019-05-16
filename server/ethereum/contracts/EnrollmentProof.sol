@@ -74,7 +74,7 @@ contract EnrollmentProof is ShiftConfig, Allowance{
     }
 
     /* Controll */
-    function addSubject(string subject) public onlyCreator{
+    function addSubject(string subject) public onlyCreatorOrOwner{
         subjects.push(subject);
         subjectsCount++;
     }
@@ -103,6 +103,15 @@ contract EnrollmentProof is ShiftConfig, Allowance{
 
     function getInfo() public view canSee returns(address, string, string, string, string, Shift){
         return (owner, name, course, ingress, period, shift);
+    }
+
+    function setInfo(address _owner, string _name, string _course, string _ingress, string _period, Shift _shift) public onlyCreator{
+        owner = _owner;
+        name = _name;
+        course = _course;
+        ingress = _ingress;
+        period = _period;
+        shift = _shift;
     }
 }
 
@@ -153,6 +162,12 @@ contract EnrollmentController is ShiftConfig{
     function getEnrollment(address _studentAddress) public view onlyCollegiate returns(address){
         require(students[_studentAddress], "It's not a student.");
         address doc = documents[ indexes[_studentAddress] ];
+        return doc;
+    }
+
+    function getEnrollment() public view onlyStudent returns(address){
+        require(students[msg.sender], "It's not a student.");
+        address doc = documents[ indexes[msg.sender] ];
         return doc;
     }
 
