@@ -52,6 +52,51 @@ app.post("/enrollment/create", async (req, res) => {
   }
 });
 
+/*
+    {
+        student: "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8398",
+        name: "Carlos",
+        course: "CIC",
+        ingress: "20151",
+        period: "20191",
+        shift: 3
+    }
+*/
+app.post("/enrollment/edit", async (req, res) => {
+  console.log(req.body);
+  const json = req.body;
+  if (!json || !json.student) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const enrollmentaddress = await enrollmentcontroller.methods
+      .getEnrollment(json.student)
+      .call({
+        from: MTMSK_ACCOUNT
+      });
+    if (!enrollmentaddress) {
+      res.sendStatus(400);
+      return;
+    }
+    const enrContract = enrollmentproof.getInstance(enrollmentaddress);
+    await enrContract.methods
+      .setInfo(
+        json.student,
+        json.name,
+        json.course,
+        json.ingress,
+        json.period,
+        json.shift
+      )
+      .send({ from: MTMSK_ACCOUNT, gas: GAS });
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
 app.get("/enrollment/list", async (req, res) => {
   try {
     const enrollments = await enrollmentcontroller.methods
@@ -69,6 +114,63 @@ app.get("/enrollment/list", async (req, res) => {
 
 /*
 {
+    "studentAddress": "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8390"
+}
+*/
+app.post("/enrollment/infoByStudent", async (req, res) => {
+  if (!req.body || !req.body.studentAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const studentAddress = req.body.studentAddress;
+    const address = await enrollmentcontroller.methods
+      .getEnrollment(studentAddress)
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    const instance = enrollmentproof.getInstance(address);
+    let info = await instance.methods
+      .getInfo()
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+    let json = {
+      student: info["0"],
+      name: info["1"],
+      course: info["2"],
+      ingress: info["3"],
+      period: info["4"],
+      shift: info["5"]
+    };
+    res.send(json);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    "studentAddress": "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8390"
+}
+*/
+app.post("/isStudent", async (req, res) => {
+  if (!req.body || !req.body.studentAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const studentAddress = req.body.studentAddress;
+    const resp = await enrollmentcontroller.methods
+      .isStudent(studentAddress)
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+    res.send(resp);
+  } catch (e) {
+    //console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
     contract: 0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A
 }
 */
@@ -79,7 +181,7 @@ app.post("/enrollment/info", async (req, res) => {
   }
   const contractAddress = req.body.contract;
   try {
-    console.log(contractAddress);
+    //console.log(contractAddress);
     const instance = enrollmentproof.getInstance(contractAddress);
     let info = await instance.methods.getInfo().call({ from: MTMSK_ACCOUNT });
     let json = {
@@ -90,7 +192,7 @@ app.post("/enrollment/info", async (req, res) => {
       period: info["4"],
       shift: info["5"]
     };
-    console.log(json);
+    //console.log(json);
     res.send(json);
   } catch (e) {
     console.log(e);
