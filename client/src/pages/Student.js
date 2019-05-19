@@ -13,13 +13,19 @@ class Student extends Component {
       course: "CIC",
       ingress: "20152",
       period: "20191",
-      shift: "3"
+      shift: "3",
+      subjects: [],
+      contractAddress: ""
     },
+    subject: {},
     loader: "",
     loaderMsg: ""
   };
 
   loaderOn = msg => {
+    let enrollment = this.state.enrollment;
+    enrollment.student = "";
+    this.setState({ enrollment });
     this.setState({ loader: "active", loaderMsg: msg });
   };
 
@@ -43,7 +49,7 @@ class Student extends Component {
       });
       if (response.status !== 204) {
         let info = await response.json();
-        window.M.toast({ html: "Conta verificada" });
+        //window.M.toast({ html: "Conta verificada" });
         console.log(info);
         this.setState({ isStudent: info });
       } else {
@@ -56,14 +62,49 @@ class Student extends Component {
     this.loaderOff();
   }
 
+  onChange = event => {
+    let subject = this.state.subject;
+    subject[event.target.name] = event.target.value;
+    this.setState({ subject });
+    //console.log(this.state.subject);
+  };
+
+  addSubject = async () => {
+    const json = {
+      contract: this.state.enrollment.contractAddress,
+      subject: this.state.subject.subjectName
+    };
+    try {
+      this.loaderOn("Adding new subject");
+      let response = await fetch("/enrollment/add/subject", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status !== 204) {
+        await this.getEnrollmentInfo();
+        window.M.toast({ html: "Subject added!" });
+      } else {
+        window.M.toast({ html: "Erro ao enviar dados" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao enviar dados" });
+      console.error(e.message);
+    }
+    this.loaderOff();
+  };
+
   async getEnrollmentInfo() {
     await this.isStudent();
     if (this.state.isStudent) {
-      console.log("Depois");
-      const json = {
-        studentAddress: this.state.actualAccount
-      };
       try {
+        const json = {
+          studentAddress: this.state.actualAccount
+        };
+
         this.loaderOn("Obtendo informações");
         let response = await fetch("/enrollment/infoByStudent", {
           method: "post",
@@ -73,10 +114,12 @@ class Student extends Component {
           },
           body: JSON.stringify(json)
         });
+
         if (response.status !== 204) {
           let info = await response.json();
-          window.M.toast({ html: "Informações retornadas" });
-          console.log(info);
+
+          //window.M.toast({ html: "Informações retornadas" });
+          //console.log(info);
           this.setState({ enrollment: info });
         } else {
           window.M.toast({ html: "Erro ao enviar dados" });
@@ -113,7 +156,11 @@ class Student extends Component {
           return (
             <div className="container row">
               <h1 className="col s12 center">Student Page</h1>
-              <EnrollmentCard enrollment={enrollment} />
+              <EnrollmentCard
+                onChange={this.onChange}
+                onAddSubject={this.addSubject}
+                enrollment={enrollment}
+              />
             </div>
           );
         } else {

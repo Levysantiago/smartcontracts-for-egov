@@ -14,6 +14,12 @@ class Input extends Component {
     return "text";
   }
 
+  getOnChange(element) {
+    if (typeof this.props.onChange !== "undefined") {
+      return this.props.onChange.bind(element);
+    }
+  }
+
   render() {
     const { col, placeholder, id, name, classname, title } = this.props;
 
@@ -28,6 +34,7 @@ class Input extends Component {
           name={name}
           type={this.getType()}
           className={"truncate black-text " + classname}
+          onChange={this.getOnChange(this)}
         />
       </div>
     );
