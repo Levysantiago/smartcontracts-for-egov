@@ -132,13 +132,29 @@ app.post("/enrollment/infoByStudent", async (req, res) => {
     let info = await instance.methods
       .getInfo()
       .call({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    // Getting the subjects
+    let qtd = await instance.methods
+      .getSubjectAmount()
+      .call({ from: MTMSK_ACCOUNT });
+
+    let subjectsList = [];
+    for (let i = 0; i < qtd; i++) {
+      let name = await instance.methods
+        .getSubject(i)
+        .call({ from: MTMSK_ACCOUNT });
+      subjectsList.push({ key: i, name: name });
+    }
+
     let json = {
       student: info["0"],
       name: info["1"],
       course: info["2"],
       ingress: info["3"],
       period: info["4"],
-      shift: info["5"]
+      shift: info["5"],
+      subjects: subjectsList,
+      contractAddress: address
     };
     res.send(json);
   } catch (e) {
@@ -194,6 +210,67 @@ app.post("/enrollment/info", async (req, res) => {
     };
     //console.log(json);
     res.send(json);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    contract: 0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A
+}
+*/
+app.post("/enrollment/subjects", async (req, res) => {
+  if (!req.body || !req.body.contract) {
+    res.sendStatus(400);
+    return;
+  }
+  const contractAddress = req.body.contract;
+  try {
+    const instance = enrollmentproof.getInstance(contractAddress);
+    let qtd = await instance.methods
+      .getSubjectAmount()
+      .call({ from: MTMSK_ACCOUNT });
+
+    let json = {
+      subjects: []
+    };
+    for (let i = 0; i < qtd; i++) {
+      let name = await instance.methods
+        .getSubject(i)
+        .call({ from: MTMSK_ACCOUNT });
+      json.subjects.push({ name: name });
+    }
+    //console.log(json);
+    res.send(json);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    contract: 0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A,
+    subject: "name"
+}
+*/
+app.post("/enrollment/add/subject", async (req, res) => {
+  if (!req.body || !req.body.contract || !req.body.subject) {
+    res.sendStatus(400);
+    return;
+  }
+  let json = req.body;
+  //console.log(json);
+  const contractAddress = json.contract;
+  try {
+    const instance = enrollmentproof.getInstance(contractAddress);
+    await instance.methods
+      .addSubject(json.subject)
+      .send({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    res.send(200);
   } catch (e) {
     console.log(e);
     res.sendStatus(204);
