@@ -56,13 +56,23 @@ contract Allowance{
 }
 
 contract EnrollmentProof is ShiftConfig, Allowance{
+    struct Subject{
+        string code;
+        string name;
+        string class;
+        string credit;
+        string schedule;
+        string room;
+    }
+
     string private name;
     string private course;
     string private ingress;
     string private period;
     Shift private shift;
-    string[] subjects;
     uint subjectsCount;
+    Subject[] subjects;
+    //string[] subjects;
     
     constructor(address _student, address _creator, string _name, string _course, string _ingress, string _period, Shift _shift) public Allowance(_creator, _student){
         name = _name;
@@ -74,8 +84,8 @@ contract EnrollmentProof is ShiftConfig, Allowance{
     }
 
     /* Controll */
-    function addSubject(string subject) public onlyCreatorOrOwner{
-        subjects.push(subject);
+    function addSubject(string _code, string _name, string _class, string _credit, string _schedule, string _room) public onlyCreatorOrOwner{
+        subjects.push(Subject(_code, _name, _class, _credit, _schedule, _room));
         subjectsCount++;
     }
 
@@ -83,8 +93,9 @@ contract EnrollmentProof is ShiftConfig, Allowance{
         return subjectsCount;
     }
 
-    function getSubject(uint index) public view canSee returns(string subject){
-        return subjects[index];
+    function getSubjects(uint index) public view canSee returns(string, string, string, string, string, string){
+        Subject memory s = subjects[index];
+        return (s.code, s.name, s.class, s.credit, s.schedule, s.room);
     }
 
     /* GETTERS */
