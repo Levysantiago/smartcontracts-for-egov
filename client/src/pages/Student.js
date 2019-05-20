@@ -66,13 +66,21 @@ class Student extends Component {
     let subject = this.state.subject;
     subject[event.target.name] = event.target.value;
     this.setState({ subject });
-    //console.log(this.state.subject);
+    console.log(this.state.subject);
   };
 
   addSubject = async () => {
+    const { code, subjectName, credit, schedule, room } = this.state.subject;
     const json = {
       contract: this.state.enrollment.contractAddress,
-      subject: this.state.subject.subjectName
+      subject: {
+        code: code,
+        name: subjectName,
+        class: this.state.subject.class,
+        credit: credit,
+        schedule: schedule,
+        room: room
+      }
     };
     try {
       this.loaderOn("Adding new subject");
@@ -119,7 +127,7 @@ class Student extends Component {
           let info = await response.json();
 
           //window.M.toast({ html: "Informações retornadas" });
-          //console.log(info);
+          console.log(info);
           this.setState({ enrollment: info });
         } else {
           window.M.toast({ html: "Erro ao enviar dados" });

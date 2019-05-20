@@ -75,16 +75,22 @@ class EnrollmentCard extends Component {
                 <tr>
                   <th>Code</th>
                   <th>Subject</th>
-                  <th>Credits</th>
+                  <th>Class</th>
+                  <th>Credit</th>
+                  <th>Schedule</th>
+                  <th>Room</th>
                 </tr>
               </thead>
 
               <tbody>
                 {this.props.enrollment.subjects.map(s => (
                   <tr key={s.key}>
-                    <td>Altair</td>
+                    <td>{s.code}</td>
                     <td>{s.name}</td>
-                    <td>$0.87</td>
+                    <td>{s.class}</td>
+                    <td>{s.credit}</td>
+                    <td>{s.schedule}</td>
+                    <td>{s.room}</td>
                   </tr>
                 ))}
               </tbody>
@@ -115,18 +121,42 @@ class EnrollmentCard extends Component {
             />
             <Input
               col="s4"
-              id="credits"
-              name="credits"
-              title="Credits"
+              id="class"
+              name="class"
+              title="Class"
+              onChange={onChange}
+            />
+            <Input
+              col="s4"
+              id="credit"
+              name="credit"
+              title="Credit"
+              onChange={onChange}
+            />
+            <Input
+              col="s4"
+              id="schedule"
+              name="schedule"
+              title="Schedule"
+              onChange={onChange}
+            />
+            <Input
+              col="s4"
+              id="room"
+              name="room"
+              title="Room"
               onChange={onChange}
             />
             <button
               className="waves-effect waves-light btn-large"
               onClick={async () => {
                 await onAddSubject();
-                this.resetInput(document.getElementById("code"));
+                /*this.resetInput(document.getElementById("code"));
                 this.resetInput(document.getElementById("subjectName"));
-                this.resetInput(document.getElementById("credits"));
+                this.resetInput(document.getElementById("class"));
+                this.resetInput(document.getElementById("credit"));
+                this.resetInput(document.getElementById("schedule"));
+                this.resetInput(document.getElementById("room"));*/
               }}
             >
               Add
