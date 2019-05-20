@@ -140,10 +140,18 @@ app.post("/enrollment/infoByStudent", async (req, res) => {
 
     let subjectsList = [];
     for (let i = 0; i < qtd; i++) {
-      let name = await instance.methods
-        .getSubject(i)
+      let info = await instance.methods
+        .getSubjects(i)
         .call({ from: MTMSK_ACCOUNT });
-      subjectsList.push({ key: i, name: name });
+      subjectsList.push({
+        key: i,
+        code: info["0"],
+        name: info["1"],
+        class: info["2"],
+        credit: info["3"],
+        schedule: info["4"],
+        room: info["5"]
+      });
     }
 
     let json = {
@@ -237,10 +245,17 @@ app.post("/enrollment/subjects", async (req, res) => {
       subjects: []
     };
     for (let i = 0; i < qtd; i++) {
-      let name = await instance.methods
+      let info = await instance.methods
         .getSubject(i)
         .call({ from: MTMSK_ACCOUNT });
-      json.subjects.push({ name: name });
+      json.subjects.push({
+        code: info["0"],
+        name: info["1"],
+        class: info["2"],
+        credit: info["3"],
+        schedule: info["4"],
+        room: info["5"]
+      });
     }
     //console.log(json);
     res.send(json);
@@ -252,8 +267,15 @@ app.post("/enrollment/subjects", async (req, res) => {
 
 /*
 {
-    contract: 0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A,
-    subject: "name"
+    "contract": "0x2742B66B96207e1267DaEE52F6EC957B03DAdf9A",
+    "subject": {
+        "code": "",
+        "name": "",
+        "class": "",
+        "credit": "",
+        "schedule": "",
+        "room": ""
+    }
 }
 */
 app.post("/enrollment/add/subject", async (req, res) => {
@@ -262,15 +284,16 @@ app.post("/enrollment/add/subject", async (req, res) => {
     return;
   }
   let json = req.body;
-  //console.log(json);
+  console.log(json);
   const contractAddress = json.contract;
+  const { code, name, credit, schedule, room } = json.subject;
   try {
     const instance = enrollmentproof.getInstance(contractAddress);
     await instance.methods
-      .addSubject(json.subject)
+      .addSubject(code, name, json.subject.class, credit, schedule, room)
       .send({ from: MTMSK_ACCOUNT, gas: GAS });
 
-    res.send(200);
+    res.sendStatus(200);
   } catch (e) {
     console.log(e);
     res.sendStatus(204);
