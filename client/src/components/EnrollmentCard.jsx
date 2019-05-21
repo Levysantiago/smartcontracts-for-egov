@@ -3,7 +3,7 @@ import Input from "./Input";
 
 class EnrollmentCard extends Component {
   componentDidMount() {
-    const { enrollment } = this.props;
+    const { enrollment, addSubjectsOff } = this.props;
     if (enrollment) {
       document.getElementById("account").value = enrollment.student;
       document.getElementById("name").value = enrollment.name;
@@ -11,6 +11,11 @@ class EnrollmentCard extends Component {
       document.getElementById("ingress").value = enrollment.ingress;
       document.getElementById("period").value = enrollment.period;
       document.getElementById("shift").value = enrollment.shift;
+      document.getElementById("creator").value = enrollment.creatorAddress;
+    }
+    if (addSubjectsOff) {
+      document.getElementById("subjects-reveal").hidden = addSubjectsOff;
+      document.getElementById("reveal-button").hidden = addSubjectsOff;
     }
   }
 
@@ -25,19 +30,33 @@ class EnrollmentCard extends Component {
       <div className="col s12">
         <div className="card white">
           <div className="card-content black-text row">
-            <span className="card-title">My Enrollment Proof</span>
+            <span className="card-title">Enrollment Proof</span>
+            <Input
+              col="s4"
+              id="creator"
+              name="creator"
+              title="Institute Address"
+              disabled={true}
+            />
             <Input
               col="s4"
               id="account"
               name="account"
-              title="Ethereum Account"
+              title="Student Account"
+              disabled={true}
+            />
+            <Input
+              col="s4"
+              id="name"
+              name="name"
+              title="Name"
               disabled={true}
             />
             <Input
               col="s6"
-              id="name"
-              name="name"
-              title="Name"
+              id="course"
+              name="course"
+              title="Course"
               disabled={true}
             />
             <Input
@@ -47,13 +66,7 @@ class EnrollmentCard extends Component {
               title="Ingress"
               disabled={true}
             />
-            <Input
-              col="s8"
-              id="course"
-              name="course"
-              title="Course"
-              disabled={true}
-            />
+
             <Input
               col="s2"
               id="period"
@@ -96,12 +109,12 @@ class EnrollmentCard extends Component {
               </tbody>
             </table>
           </div>
-          <div className="card-action">
+          <div id="reveal-button" className="card-action">
             <a href="javascript:void(0)" className="activator">
               Add new Subject
             </a>
           </div>
-          <div className="card-reveal">
+          <div id="subjects-reveal" className="card-reveal">
             <span className="card-title grey-text text-darken-4">
               Add new Subject<i className="material-icons right">close</i>
             </span>

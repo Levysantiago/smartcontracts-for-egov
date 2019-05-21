@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import EnrollmentForm from "../components/EnrollmentForm";
 import ListCard from "../components/ListCard";
 import Loader from "../components/Loader";
-import "./App.css";
 const { web3 } = require("../lib/web3");
 
 class App extends Component {
@@ -10,6 +9,7 @@ class App extends Component {
     enrollments: [],
     actualAccount: "",
     edit: false,
+    isCollegiate: undefined,
     enrollment: {
       student: "",
       name: "",
@@ -19,20 +19,52 @@ class App extends Component {
       shift: ""
     },
     loader: "",
+    hide: "hide",
     loaderMsg: ""
   };
 
   async componentDidMount() {
     const account = await web3.eth.getAccounts();
-    this.loaderOn("Listando matrículas");
     this.setState({
       actualAccount: account[0]
     });
-    await this.updateEnrollmentList();
+    await this.isCollegiate();
+    if (this.state.isCollegiate) {
+      await this.updateEnrollmentList();
+    }
+  }
+
+  async isCollegiate() {
+    const json = {
+      address: this.state.actualAccount
+    };
+    try {
+      this.loaderOn("Verificando conta");
+      let response = await fetch("/isCollegiate", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status !== 204) {
+        let info = await response.json();
+        //window.M.toast({ html: "Conta verificada" });
+        //console.log(info);
+        this.setState({ isCollegiate: info });
+      } else {
+        window.M.toast({ html: "Erro ao verificar conta" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao verificar conta" });
+      console.error(e.message);
+    }
     this.loaderOff();
   }
 
   updateEnrollmentList = async () => {
+    this.loaderOn("Listando matrículas");
     try {
       let response = await fetch("/enrollment/list");
       const list = await response.json();
@@ -42,6 +74,7 @@ class App extends Component {
     } catch (e) {
       console.error(e.message);
     }
+    this.loaderOff();
   };
 
   onChange = event => {
@@ -130,39 +163,58 @@ class App extends Component {
   };
 
   loaderOn = msg => {
-    this.setState({ loader: "active", loaderMsg: msg });
+    this.setState({ loader: "active", loaderMsg: msg, hide: "hide" });
   };
 
   loaderOff = () => {
-    this.setState({ loader: "", loaderMsg: "" });
+    this.setState({ loader: "", loaderMsg: "", hide: "" });
   };
 
   render() {
     const {
       enrollments,
       edit,
+      isCollegiate,
       enrollment,
       actualAccount,
       loader,
+      hide,
       loaderMsg
     } = this.state;
+    if (isCollegiate != undefined && !isCollegiate) {
+      return (
+        <div className="container row center">
+          <label className="col s12">
+            Desculpa, mas esta conta não tem permissão para acessar a página.
+          </label>
+          <div className="col s12">
+            <a href="/" className="waves-effect waves-light btn">
+              refresh
+            </a>
+          </div>
+        </div>
+      );
+    }
     if (actualAccount) {
       return (
         <div className="App">
-          <div className="container row">
+          <div className="container row center">
             <label className="col s12">Account: {actualAccount}</label>
-            <EnrollmentForm
-              onClick={this.onClick}
-              onEdit={this.onEdit}
-              onChange={this.onChange}
-              edit={edit}
-              enrollment={enrollment}
-            />
-            <ListCard
-              title="Matrículas"
-              list={enrollments}
-              onClick={this.onEnrollmentClick}
-            />
+            <div className={hide}>
+              <EnrollmentForm
+                onClick={this.onClick}
+                onEdit={this.onEdit}
+                onChange={this.onChange}
+                edit={edit}
+                enrollment={enrollment}
+              />
+              <ListCard
+                title="Matrículas"
+                list={enrollments}
+                onClick={this.onEnrollmentClick}
+              />
+            </div>
+            <br />
             <Loader state={loader} msg={loaderMsg} />
           </div>
         </div>

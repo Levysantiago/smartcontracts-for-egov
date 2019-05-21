@@ -129,9 +129,16 @@ app.post("/enrollment/infoByStudent", async (req, res) => {
       .call({ from: MTMSK_ACCOUNT, gas: GAS });
 
     const instance = enrollmentproof.getInstance(address);
+
+    // Getting enrollment proof information
     let info = await instance.methods
       .getInfo()
       .call({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    // Getting the creator account
+    let creator_address = await instance.methods.creator().call({
+      from: MTMSK_ACCOUNT
+    });
 
     // Getting the subjects
     let qtd = await instance.methods
@@ -162,9 +169,72 @@ app.post("/enrollment/infoByStudent", async (req, res) => {
       period: info["4"],
       shift: info["5"],
       subjects: subjectsList,
-      contractAddress: address
+      contractAddress: address,
+      creatorAddress: creator_address
     };
     res.send(json);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    "studentAddress": "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8390",
+    "genericAddress": "0xba2A138f487F4d367fa31Da09ccbbAE6cDaD8390"
+}
+*/
+app.post("/enrollment/allowed", async (req, res) => {
+  if (!req.body || !req.body.studentAddress || !req.body.genericAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const studentAddress = req.body.studentAddress;
+    const genericAddress = req.body.genericAddress;
+    const address = await enrollmentcontroller.methods
+      .getEnrollment(studentAddress)
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    const instance = enrollmentproof.getInstance(address);
+
+    // Verifying allowance permission
+    const allowed = await instance.methods
+      .isAllowed(genericAddress)
+      .call({ from: MTMSK_ACCOUNT });
+
+    res.send(allowed);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    "studentAddress": "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8390",
+    "genericAddress": "0xba2A138f487F4d367fa31Da09ccbbAE6cDaD8390"
+}
+*/
+app.post("/enrollment/allow", async (req, res) => {
+  if (!req.body || !req.body.studentAddress || !req.body.genericAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const studentAddress = req.body.studentAddress;
+    const genericAddress = req.body.genericAddress;
+    const address = await enrollmentcontroller.methods
+      .getEnrollment(studentAddress)
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+
+    const instance = enrollmentproof.getInstance(address);
+
+    // Verifying allowance permission
+    await instance.methods.allow(genericAddress).call({ from: MTMSK_ACCOUNT });
+
+    res.send(200);
   } catch (e) {
     console.log(e);
     res.sendStatus(204);
@@ -185,6 +255,28 @@ app.post("/isStudent", async (req, res) => {
     const studentAddress = req.body.studentAddress;
     const resp = await enrollmentcontroller.methods
       .isStudent(studentAddress)
+      .call({ from: MTMSK_ACCOUNT, gas: GAS });
+    res.send(resp);
+  } catch (e) {
+    //console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+{
+    "address": "0xba2A138f487F4d367fa31Da09ccbbAE6cDaD8390"
+}
+*/
+app.post("/isCollegiate", async (req, res) => {
+  if (!req.body || !req.body.address) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const address = req.body.address;
+    const resp = await enrollmentcontroller.methods
+      .isCollegiate(address)
       .call({ from: MTMSK_ACCOUNT, gas: GAS });
     res.send(resp);
   } catch (e) {
