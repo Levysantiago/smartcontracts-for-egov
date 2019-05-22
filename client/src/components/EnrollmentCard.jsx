@@ -12,6 +12,7 @@ class EnrollmentCard extends Component {
       document.getElementById("period").value = enrollment.period;
       document.getElementById("shift").value = enrollment.shift;
       document.getElementById("creator").value = enrollment.creatorAddress;
+      document.getElementById("contract").value = enrollment.contractAddress;
     }
     if (addSubjectsOff) {
       document.getElementById("subjects-reveal").hidden = addSubjectsOff;
@@ -24,20 +25,123 @@ class EnrollmentCard extends Component {
     input.className = "active";
   };
 
-  render() {
+  allowanceForm = () => {
+    const { onChangeAllowance, onClickAllow, onClickDisallow } = this.props;
+    return (
+      <div className="row">
+        <div className="col s6">
+          <br />
+          <span className="card-title grey-text text-darken-4">
+            Allow/Disallow Account
+          </span>
+          <Input
+            col="s12"
+            id="allowedAddress"
+            name="allowedAddress"
+            title="Account Address"
+            onChange={onChangeAllowance.bind(this)}
+          />
+          <button
+            className="col s4 waves-effect waves-light btn-large"
+            onClick={onClickAllow}
+          >
+            Allow
+          </button>
+          <button
+            className="col s4 offset-s2 waves-effect waves-light btn-large"
+            onClick={onClickDisallow}
+          >
+            Disallow
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  newSubjectForm = () => {
     const { onChange, onAddSubject } = this.props;
+    return (
+      <div>
+        <span className="card-title grey-text text-darken-4">
+          Add new Subject<i className="material-icons right">close</i>
+        </span>
+        <Input
+          col="s4"
+          id="code"
+          name="code"
+          title="Code"
+          onChange={onChange}
+        />
+        <Input
+          col="s4"
+          id="subjectName"
+          name="subjectName"
+          title="Subject Name"
+          onChange={onChange}
+        />
+        <Input
+          col="s4"
+          id="class"
+          name="class"
+          title="Class"
+          onChange={onChange}
+        />
+        <Input
+          col="s4"
+          id="credit"
+          name="credit"
+          title="Credit"
+          onChange={onChange}
+        />
+        <Input
+          col="s4"
+          id="schedule"
+          name="schedule"
+          title="Schedule"
+          onChange={onChange}
+        />
+        <Input
+          col="s4"
+          id="room"
+          name="room"
+          title="Room"
+          onChange={onChange}
+        />
+        <button
+          className="waves-effect waves-light btn-large"
+          onClick={async () => {
+            await onAddSubject();
+          }}
+        >
+          Add
+        </button>
+
+        {this.allowanceForm()}
+      </div>
+    );
+  };
+
+  render() {
     return (
       <div className="col s12">
         <div className="card white">
           <div className="card-content black-text row">
             <span className="card-title">Enrollment Proof</span>
             <Input
-              col="s4"
+              col="s6"
               id="creator"
               name="creator"
               title="Institute Address"
               disabled={true}
             />
+            <Input
+              col="s6"
+              id="contract"
+              name="contract"
+              title="Contract Address"
+              disabled={true}
+            />
+
             <Input
               col="s4"
               id="account"
@@ -46,17 +150,10 @@ class EnrollmentCard extends Component {
               disabled={true}
             />
             <Input
-              col="s4"
+              col="s6"
               id="name"
               name="name"
               title="Name"
-              disabled={true}
-            />
-            <Input
-              col="s6"
-              id="course"
-              name="course"
-              title="Course"
               disabled={true}
             />
             <Input
@@ -67,6 +164,13 @@ class EnrollmentCard extends Component {
               disabled={true}
             />
 
+            <Input
+              col="s8"
+              id="course"
+              name="course"
+              title="Course"
+              disabled={true}
+            />
             <Input
               col="s2"
               id="period"
@@ -111,69 +215,11 @@ class EnrollmentCard extends Component {
           </div>
           <div id="reveal-button" className="card-action">
             <a href="javascript:void(0)" className="activator">
-              Add new Subject
+              Management
             </a>
           </div>
           <div id="subjects-reveal" className="card-reveal">
-            <span className="card-title grey-text text-darken-4">
-              Add new Subject<i className="material-icons right">close</i>
-            </span>
-            <Input
-              col="s4"
-              id="code"
-              name="code"
-              title="Code"
-              onChange={onChange}
-            />
-            <Input
-              col="s4"
-              id="subjectName"
-              name="subjectName"
-              title="Subject Name"
-              onChange={onChange}
-            />
-            <Input
-              col="s4"
-              id="class"
-              name="class"
-              title="Class"
-              onChange={onChange}
-            />
-            <Input
-              col="s4"
-              id="credit"
-              name="credit"
-              title="Credit"
-              onChange={onChange}
-            />
-            <Input
-              col="s4"
-              id="schedule"
-              name="schedule"
-              title="Schedule"
-              onChange={onChange}
-            />
-            <Input
-              col="s4"
-              id="room"
-              name="room"
-              title="Room"
-              onChange={onChange}
-            />
-            <button
-              className="waves-effect waves-light btn-large"
-              onClick={async () => {
-                await onAddSubject();
-                /*this.resetInput(document.getElementById("code"));
-                this.resetInput(document.getElementById("subjectName"));
-                this.resetInput(document.getElementById("class"));
-                this.resetInput(document.getElementById("credit"));
-                this.resetInput(document.getElementById("schedule"));
-                this.resetInput(document.getElementById("room"));*/
-              }}
-            >
-              Add
-            </button>
+            {this.newSubjectForm()}
           </div>
         </div>
       </div>
