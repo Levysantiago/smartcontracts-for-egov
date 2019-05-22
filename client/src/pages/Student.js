@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import EnrollmentCard from "../components/EnrollmentCard";
 import Loader from "../components/Loader";
 import Input from "../components/Input";
+import NotLogged from "../components/NotLogged";
+import Navbar from "../components/Navbar";
 const { web3 } = require("../lib/web3");
 
 class Student extends Component {
@@ -11,6 +13,7 @@ class Student extends Component {
     isAllowed: undefined,
     hideSubjects: false,
     studentAddress: "",
+    allowedAddress: "",
     enrollment: {
       student: "",
       name: "",
@@ -64,7 +67,7 @@ class Student extends Component {
         },
         body: JSON.stringify(json)
       });
-      if (response.status !== 204) {
+      if (response.status === 200) {
         let info = await response.json();
         //window.M.toast({ html: "Conta verificada" });
         //console.log(info);
@@ -94,10 +97,11 @@ class Student extends Component {
         },
         body: JSON.stringify(json)
       });
-      if (response.status !== 204) {
+      if (response.status === 200) {
         let info = await response.json();
-        //window.M.toast({ html: "Conta verificada" });
-        //console.log(info);
+        if (!info) {
+          window.M.toast({ html: "No permission for this enrollment" });
+        }
         this.setState({ isAllowed: info, hideSubjects: true });
       } else {
         window.M.toast({ html: "Erro ao enviar dados" });
@@ -119,6 +123,11 @@ class Student extends Component {
   onChangeStudentInput = event => {
     this.setState({ studentAddress: event.target.value });
     //console.log(this.state.studentAddress);
+  };
+
+  onChangeAllowance = event => {
+    this.setState({ allowedAddress: event.target.value });
+    //console.log(this.state.allowedAddress);
   };
 
   onClickEnrollmentSearch = async () => {
@@ -148,9 +157,67 @@ class Student extends Component {
         },
         body: JSON.stringify(json)
       });
-      if (response.status !== 204) {
+      if (response.status === 200) {
         await this.getEnrollmentInfo();
         window.M.toast({ html: "Subject added!" });
+      } else {
+        window.M.toast({ html: "Erro ao enviar dados" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao enviar dados" });
+      console.error(e.message);
+    }
+    this.loaderOff();
+  };
+
+  onClickAllow = async () => {
+    const { allowedAddress } = this.state;
+    const json = {
+      contract: this.state.enrollment.contractAddress,
+      allowedAddress: allowedAddress
+    };
+    try {
+      this.loaderOn("Allowing address");
+      let response = await fetch("/enrollment/allow", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status === 200) {
+        window.M.toast({ html: "Address allowed" });
+        await this.getEnrollmentInfo();
+      } else {
+        window.M.toast({ html: "Erro ao enviar dados" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao enviar dados" });
+      console.error(e.message);
+    }
+    this.loaderOff();
+  };
+
+  onClickDisallow = async () => {
+    const { allowedAddress } = this.state;
+    const json = {
+      contract: this.state.enrollment.contractAddress,
+      disallowedAddress: allowedAddress
+    };
+    try {
+      this.loaderOn("Disallowing address");
+      let response = await fetch("/enrollment/disallow", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status === 200) {
+        window.M.toast({ html: "Address disallowed" });
+        await this.getEnrollmentInfo();
       } else {
         window.M.toast({ html: "Erro ao enviar dados" });
       }
@@ -185,7 +252,7 @@ class Student extends Component {
           body: JSON.stringify(json)
         });
 
-        if (response.status !== 204) {
+        if (response.status === 200) {
           let info = await response.json();
 
           //window.M.toast({ html: "Informações retornadas" });
@@ -208,7 +275,9 @@ class Student extends Component {
       actualAccount: account[0]
     });
 
-    await this.getEnrollmentInfo();
+    if (account[0]) {
+      await this.getEnrollmentInfo();
+    }
   }
 
   getEnrollmentCard() {
@@ -218,7 +287,10 @@ class Student extends Component {
         <div className={hide}>
           <EnrollmentCard
             onChange={this.onChangeSubject}
+            onChangeAllowance={this.onChangeAllowance}
             onAddSubject={this.addSubject}
+            onClickAllow={this.onClickAllow}
+            onClickDisallow={this.onClickDisallow}
             enrollment={enrollment}
             addSubjectsOff={hideSubjects}
           />
@@ -241,61 +313,57 @@ class Student extends Component {
     if (actualAccount) {
       if (isStudent === undefined || isStudent || isAllowed) {
         return (
-          <div className="container row">
-            <h1 className="col s12 center">Enrollment Proof Page</h1>
-            {this.getEnrollmentCard()}
-            <div className={hideLoader}>
-              <Loader state={loader} msg={loaderMsg} />
+          <div>
+            <Navbar address={actualAccount} />
+            <div className="container row">
+              <h1 className="col s12 center">Enrollment Proof Page</h1>
+              {this.getEnrollmentCard()}
+              <div className={hideLoader}>
+                <Loader state={loader} msg={loaderMsg} />
+              </div>
             </div>
           </div>
         );
       } else {
         return (
-          <div className="container">
-            <div className={"row " + hide}>
-              <h1 className="col s12 center">Enrollment Proof Page</h1>
-              <label className="col s12 center">
-                Você não é estudante. Tente pesquisar uma matrícula para
-                verificar se tem acesso.
-              </label>
-            </div>
-            <div className={"row " + hide}>
-              <Input
-                col="s6"
-                id="student-address"
-                name="student-address"
-                title="Student Address"
-                onChange={this.onChangeStudentInput.bind(this)}
-              />
-            </div>
-            <div className={"row " + hide}>
-              <button
-                className="waves-effect waves-light btn col s2"
-                onClick={this.onClickEnrollmentSearch}
-              >
-                Search
-              </button>
-            </div>
-            <div className={"row " + hideLoader}>
-              <h1 className="col s12 center">Enrollment Proof Page</h1>
-              <Loader state={loader} msg={loaderMsg} />
+          <div>
+            <Navbar address={actualAccount} />
+
+            <div className="container">
+              <div className={"row " + hide}>
+                <h1 className="col s12 center">Enrollment Proof Page</h1>
+                <label className="col s12 center">
+                  Você não é estudante. Tente pesquisar uma matrícula para
+                  verificar se tem acesso.
+                </label>
+              </div>
+              <div className={"row " + hide}>
+                <Input
+                  col="s6"
+                  id="student-address"
+                  name="student-address"
+                  title="Student Address"
+                  onChange={this.onChangeStudentInput.bind(this)}
+                />
+              </div>
+              <div className={"row " + hide}>
+                <button
+                  className="waves-effect waves-light btn col s2"
+                  onClick={this.onClickEnrollmentSearch}
+                >
+                  Search
+                </button>
+              </div>
+              <div className={"row " + hideLoader}>
+                <h1 className="col s12 center">Enrollment Proof Page</h1>
+                <Loader state={loader} msg={loaderMsg} />
+              </div>
             </div>
           </div>
         );
       }
     } else {
-      return (
-        <div className="App container row center">
-          <label className="col s12">
-            Por favor, realize o login no Metamask
-          </label>
-          <div className="col s12">
-            <a href="/" className="waves-effect waves-light btn">
-              refresh
-            </a>
-          </div>
-        </div>
-      );
+      return <NotLogged />;
     }
   }
 }
