@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import EnrollmentForm from "../components/EnrollmentForm";
 import ListCard from "../components/ListCard";
 import Loader from "../components/Loader";
+import NotLogged from "../components/NotLogged";
+import Navbar from "../components/Navbar";
 const { web3 } = require("../lib/web3");
 
 class App extends Component {
@@ -28,9 +30,11 @@ class App extends Component {
     this.setState({
       actualAccount: account[0]
     });
-    await this.isCollegiate();
-    if (this.state.isCollegiate) {
-      await this.updateEnrollmentList();
+    if (account[0]) {
+      await this.isCollegiate();
+      if (this.state.isCollegiate) {
+        await this.updateEnrollmentList();
+      }
     }
   }
 
@@ -183,14 +187,18 @@ class App extends Component {
     } = this.state;
     if (isCollegiate != undefined && !isCollegiate) {
       return (
-        <div className="container row center">
-          <label className="col s12">
-            Desculpa, mas esta conta não tem permissão para acessar a página.
-          </label>
-          <div className="col s12">
-            <a href="/" className="waves-effect waves-light btn">
-              refresh
-            </a>
+        <div>
+          <Navbar address={actualAccount} />
+
+          <div className="container row center">
+            <label className="col s12">
+              Desculpa, mas esta conta não tem permissão para acessar a página.
+            </label>
+            <div className="col s12">
+              <a href="/" className="waves-effect waves-light btn">
+                refresh
+              </a>
+            </div>
           </div>
         </div>
       );
@@ -198,8 +206,8 @@ class App extends Component {
     if (actualAccount) {
       return (
         <div className="App">
+          <Navbar address={actualAccount} />
           <div className="container row center">
-            <label className="col s12">Account: {actualAccount}</label>
             <div className={hide}>
               <EnrollmentForm
                 onClick={this.onClick}
@@ -220,18 +228,7 @@ class App extends Component {
         </div>
       );
     } else {
-      return (
-        <div className="App container row">
-          <label className="col s12">
-            Por favor, realize o login no Metamask
-          </label>
-          <div className="col s12">
-            <a href="/" className="waves-effect waves-light btn">
-              refresh
-            </a>
-          </div>
-        </div>
-      );
+      return <NotLogged />;
     }
   }
 }
