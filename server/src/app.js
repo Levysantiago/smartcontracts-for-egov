@@ -97,6 +97,50 @@ app.post("/enrollment/edit", async (req, res) => {
   }
 });
 
+/*
+    "contract": "0x3h4j5h8f487F4d367fa31Da09ccbbAE6cDaD8398",
+    "allowedAddress": "0xta2A135kld7F4d367fa31Da09ccbbAE6cDaD8398"
+*/
+app.post("/enrollment/allow", async (req, res) => {
+  const json = req.body;
+  if (!json || !json.contract || !json.allowedAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const contract = enrollmentproof.getInstance(json.contract);
+    await contract.methods
+      .allow(json.allowedAddress)
+      .send({ from: MTMSK_ACCOUNT, gas: GAS });
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
+/*
+    "contract": "0x3h4j5h8f487F4d367fa31Da09ccbbAE6cDaD8398",
+    "disallowedAddress": "0xta2A135kld7F4d367fa31Da09ccbbAE6cDaD8398"
+*/
+app.post("/enrollment/disallow", async (req, res) => {
+  const json = req.body;
+  if (!json || !json.contract || !json.disallowedAddress) {
+    res.sendStatus(400);
+    return;
+  }
+  try {
+    const contract = enrollmentproof.getInstance(json.contract);
+    await contract.methods
+      .disallow(json.disallowedAddress)
+      .send({ from: MTMSK_ACCOUNT, gas: GAS });
+    res.sendStatus(200);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(204);
+  }
+});
+
 app.get("/enrollment/list", async (req, res) => {
   try {
     const enrollments = await enrollmentcontroller.methods
