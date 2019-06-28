@@ -142,6 +142,10 @@ class App extends Component {
     }
   };
 
+  onCancelEdit = async () => {
+    this.setState({ edit: false });
+  };
+
   onClick = async () => {
     this.loaderOn("Adicionando nova matrícula");
     window.M.toast({ html: "Dados enviados" });
@@ -212,6 +216,7 @@ class App extends Component {
               <EnrollmentForm
                 onClick={this.onClick}
                 onEdit={this.onEdit}
+                onCancelEdit={this.onCancelEdit}
                 onChange={this.onChange}
                 edit={edit}
                 enrollment={enrollment}

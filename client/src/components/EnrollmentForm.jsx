@@ -205,7 +205,7 @@ class EnrollmentForm extends Component {
   };
 
   printEditForm = props => {
-    const { onChange, onEdit, enrollment } = props;
+    const { onChange, onEdit, onCancelEdit, enrollment } = props;
     document.getElementById("name").value = enrollment.name;
     document.getElementById("course").value = enrollment.course;
     document.getElementById("ingress").value = enrollment.ingress;
@@ -300,6 +300,21 @@ class EnrollmentForm extends Component {
           </div>
         </div>
         <div className="card-action" id="addMatricula">
+          <button
+            className="waves-effect small waves-light grey btn"
+            style={{ marginRight: "5px" }}
+            onClick={async () => {
+              await onCancelEdit();
+              this.resetInput(document.getElementById("name"));
+              this.resetInput(document.getElementById("course"));
+              this.resetInput(document.getElementById("ingress"));
+              this.resetInput(document.getElementById("period"));
+              this.resetSelect(document.getElementById("shift"));
+              this.resetInput(document.getElementById("student"));
+            }}
+          >
+            Cancelar
+          </button>
           <button
             className="waves-effect small waves-light btn"
             onClick={async () => {
