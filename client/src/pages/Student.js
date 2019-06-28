@@ -10,10 +10,12 @@ class Student extends Component {
   state = {
     actualAccount: "",
     isStudent: undefined,
+    isCollegiate: undefined,
     isAllowed: undefined,
     hideSubjects: false,
     studentAddress: "",
     allowedAddress: "",
+    status: "",
     enrollment: {
       student: "",
       name: "",
@@ -52,6 +54,35 @@ class Student extends Component {
       hideLoader: "hide"
     });
   };
+
+  async isCollegiate() {
+    const json = {
+      address: this.state.actualAccount
+    };
+    try {
+      this.loaderOn("Verificando conta");
+      let response = await fetch("/isCollegiate", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status !== 204) {
+        let info = await response.json();
+        //window.M.toast({ html: "Conta verificada" });
+        //console.log(info);
+        this.setState({ isCollegiate: info });
+      } else {
+        window.M.toast({ html: "Erro ao verificar conta" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao verificar conta" });
+      console.error(e.message);
+    }
+    this.loaderOff();
+  }
 
   async isStudent() {
     const json = {
@@ -236,6 +267,7 @@ class Student extends Component {
     } else {
       await this.isStudent();
     }
+
     if (this.state.isStudent || this.state.isAllowed) {
       try {
         const json = {
@@ -276,6 +308,19 @@ class Student extends Component {
     });
 
     if (account[0]) {
+      await this.isCollegiate();
+      if (this.state.isCollegiate) {
+        this.setState({ status: "Colegiado" });
+      } else {
+        await this.isStudent();
+        /*Atualizando status da conta*/
+
+        if (this.state.isStudent) {
+          this.setState({ status: "Student" });
+        } else {
+          this.setState({ status: "Visitor" });
+        }
+      }
       await this.getEnrollmentInfo();
     }
   }
@@ -307,14 +352,15 @@ class Student extends Component {
       loader,
       loaderMsg,
       hide,
-      hideLoader
+      hideLoader,
+      status
     } = this.state;
 
     if (actualAccount) {
       if (isStudent === undefined || isStudent || isAllowed) {
         return (
           <div>
-            <Navbar address={actualAccount} />
+            <Navbar address={actualAccount} status={status} />
             <div className="container row">
               <h1 className="col s12 center">Enrollment Proof Page</h1>
               {this.getEnrollmentCard()}
@@ -327,7 +373,7 @@ class Student extends Component {
       } else {
         return (
           <div>
-            <Navbar address={actualAccount} />
+            <Navbar address={actualAccount} status={status} />
 
             <div className="container">
               <div className={"row " + hide}>

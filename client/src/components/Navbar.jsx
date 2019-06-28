@@ -2,11 +2,19 @@ import React, { Component } from "react";
 import MetamaskLogo from "./MetamaskLogo";
 
 class Navbar extends Component {
+  getStatusColor(status) {
+    if (status) {
+      return "green";
+    } else {
+      return "grey";
+    }
+  }
+
   render() {
     const logoStyle = {
       marginTop: 10
     };
-    const { address } = this.props;
+    const { address, status } = this.props;
 
     return (
       <nav>
@@ -16,7 +24,7 @@ class Navbar extends Component {
               <MetamaskLogo width={50} height={40} move={false} />
             </div>
             <label className="col s10 hide-on-med-and-down">
-              Address: {address}
+              Address: {address.toLowerCase()}
             </label>
           </div>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
@@ -28,6 +36,17 @@ class Navbar extends Component {
             <li>
               <a className="black-text" href="/student">
                 Enrollment
+              </a>
+            </li>
+            <li>
+              <a
+                className={
+                  "btn-floating btn-small z-depth-0 " +
+                  this.getStatusColor(status)
+                }
+                title={status}
+              >
+                {status.charAt(0)}
               </a>
             </li>
           </ul>

@@ -12,6 +12,8 @@ class App extends Component {
     actualAccount: "",
     edit: false,
     isCollegiate: undefined,
+    isStudent: undefined,
+    status: "",
     enrollment: {
       student: "",
       name: "",
@@ -34,8 +36,45 @@ class App extends Component {
       await this.isCollegiate();
       if (this.state.isCollegiate) {
         await this.updateEnrollmentList();
+        this.setState({ status: "Colegiado" });
+      } else {
+        await this.isStudent();
+        if (this.state.isStudent) {
+          this.setState({ status: "Student" });
+        } else {
+          this.setState({ status: "Visitor" });
+        }
       }
     }
+  }
+
+  async isStudent() {
+    const json = {
+      studentAddress: this.state.actualAccount
+    };
+    try {
+      this.loaderOn("Verificando conta");
+      let response = await fetch("/isStudent", {
+        method: "post",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(json)
+      });
+      if (response.status !== 204) {
+        let info = await response.json();
+        //window.M.toast({ html: "Conta verificada" });
+        //console.log(info);
+        this.setState({ isStudent: info });
+      } else {
+        window.M.toast({ html: "Erro ao verificar conta" });
+      }
+    } catch (e) {
+      window.M.toast({ html: "Erro ao verificar conta" });
+      console.error(e.message);
+    }
+    this.loaderOff();
   }
 
   async isCollegiate() {
@@ -187,12 +226,13 @@ class App extends Component {
       actualAccount,
       loader,
       hide,
-      loaderMsg
+      loaderMsg,
+      status
     } = this.state;
     if (isCollegiate != undefined && !isCollegiate) {
       return (
         <div>
-          <Navbar address={actualAccount} />
+          <Navbar address={actualAccount} status={status} />
 
           <div className="container row center">
             <label className="col s12">
@@ -210,7 +250,7 @@ class App extends Component {
     if (actualAccount) {
       return (
         <div className="App">
-          <Navbar address={actualAccount} />
+          <Navbar address={actualAccount} status={status} />
           <div className="container row center">
             <div className={hide}>
               <EnrollmentForm
