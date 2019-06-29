@@ -97,11 +97,11 @@ class EnrollmentForm extends Component {
   }
 
   printAddForm = props => {
-    const { onChange, onClick } = props;
+    const { onChange, onClick, lang } = props;
     return (
       <div className="card white">
         <div className="card-content black-text">
-          <span className="card-title">Nova Matrícula</span>
+          <span className="card-title">{lang.ENR_FRM_TITLE}</span>
           <div className="row">
             <div className="input-field col s12">
               <input
@@ -112,7 +112,7 @@ class EnrollmentForm extends Component {
                 name="name"
               />
               <label className="active" htmlFor="name">
-                Nome
+                {lang.ENR_FRM_NAME}
               </label>
             </div>
 
@@ -125,7 +125,7 @@ class EnrollmentForm extends Component {
                 name="course"
               />
               <label className="active" htmlFor="course">
-                Curso
+                {lang.ENR_FRM_COURSE}
               </label>
             </div>
 
@@ -138,7 +138,7 @@ class EnrollmentForm extends Component {
                 name="ingress"
               />
               <label className="active" htmlFor="ingress">
-                Ingresso
+                {lang.ENR_FRM_INGRESS}
               </label>
             </div>
 
@@ -151,7 +151,7 @@ class EnrollmentForm extends Component {
                 name="period"
               />
               <label className="active" htmlFor="period">
-                Período
+                {lang.ENR_FRM_PERIOD}
               </label>
             </div>
 
@@ -162,12 +162,12 @@ class EnrollmentForm extends Component {
                 value="1"
                 onChange={onChange.bind(this)}
               >
-                <option value="1">Matutino</option>
-                <option value="2">Vespertino</option>
-                <option value="3">Noturno</option>
-                <option value="4">Integral</option>
+                <option value="1">{lang.ENR_FRM_SCHEDULE_MORNING}</option>
+                <option value="2">{lang.ENR_FRM_SCHEDULE_EVENING}</option>
+                <option value="3">{lang.ENR_FRM_SCHEDULE_NIGHT}</option>
+                <option value="4">{lang.ENR_FRM_SCHEDULE_INTEGRAL}</option>
               </select>
-              <label>Materialize Select</label>
+              <label>{lang.ENR_FRM_SCHEDULE}</label>
             </div>
 
             <div className="input-field col s12">
@@ -179,7 +179,7 @@ class EnrollmentForm extends Component {
                 name="student"
               />
               <label className="active" htmlFor="student">
-                Conta Metamask
+                {lang.ENR_FRM_METAMASK_ACCOUNT}
               </label>
             </div>
           </div>
@@ -197,7 +197,7 @@ class EnrollmentForm extends Component {
               this.resetInput(document.getElementById("student"));
             }}
           >
-            Adicionar
+            {lang.ENR_FRM_BTN_ADD}
           </button>
         </div>
       </div>
@@ -205,7 +205,7 @@ class EnrollmentForm extends Component {
   };
 
   printEditForm = props => {
-    const { onChange, onEdit, onCancelEdit, enrollment } = props;
+    const { onChange, onEdit, onCancelEdit, enrollment, lang } = props;
     document.getElementById("name").value = enrollment.name;
     document.getElementById("course").value = enrollment.course;
     document.getElementById("ingress").value = enrollment.ingress;
@@ -228,7 +228,7 @@ class EnrollmentForm extends Component {
                 //value={enrollment.name}
               />
               <label className="active" htmlFor="name">
-                Nome
+                {lang.ENR_FRM_NAME}
               </label>
             </div>
 
@@ -242,7 +242,7 @@ class EnrollmentForm extends Component {
                 //value={enrollment.course}
               />
               <label className="active" htmlFor="course">
-                Curso
+                {lang.ENR_FRM_COURSE}
               </label>
             </div>
 
@@ -256,7 +256,7 @@ class EnrollmentForm extends Component {
                 //value={enrollment.ingress}
               />
               <label className="active" htmlFor="ingress">
-                Ingresso
+                {lang.ENR_FRM_INGRESS}
               </label>
             </div>
 
@@ -270,18 +270,18 @@ class EnrollmentForm extends Component {
                 //value={enrollment.period}
               />
               <label className="active" htmlFor="period">
-                Período
+                {lang.ENR_FRM_PERIOD}
               </label>
             </div>
 
             <div className="input-field col s6">
               <select id="shift" name="shift" onChange={onChange.bind(this)}>
-                <option value="1">Matutino</option>
-                <option value="2">Vespertino</option>
-                <option value="3">Noturno</option>
-                <option value="4">Integral</option>
+                <option value="1">{lang.ENR_FRM_SCHEDULE_MORNING}</option>
+                <option value="2">{lang.ENR_FRM_SCHEDULE_EVENING}</option>
+                <option value="3">{lang.ENR_FRM_SCHEDULE_NIGHT}</option>
+                <option value="4">{lang.ENR_FRM_SCHEDULE_INTEGRAL}</option>
               </select>
-              <label>Materialize Select</label>
+              <label>{lang.ENR_FRM_SCHEDULE}</label>
             </div>
 
             <div className="input-field col s12">
@@ -294,7 +294,7 @@ class EnrollmentForm extends Component {
                 disabled
               />
               <label className="active" htmlFor="student">
-                Conta Metamask
+                {lang.ENR_FRM_METAMASK_ACCOUNT}
               </label>
             </div>
           </div>
@@ -313,7 +313,7 @@ class EnrollmentForm extends Component {
               this.resetInput(document.getElementById("student"));
             }}
           >
-            Cancelar
+            {lang.ENR_FRM_BTN_CANCEL}
           </button>
           <button
             className="waves-effect small waves-light btn"
@@ -327,7 +327,7 @@ class EnrollmentForm extends Component {
               this.resetInput(document.getElementById("student"));
             }}
           >
-            Editar
+            {lang.ENR_FRM_BTN_EDIT}
           </button>
         </div>
       </div>
