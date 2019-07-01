@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import EnrollmentForm from "../components/EnrollmentForm";
 import ListCard from "../components/ListCard";
 import Loader from "../components/Loader";
-import NotLogged from "../components/NotLogged";
+import CardWarning from "../components/CardWarning";
 import Navbar from "../components/Navbar";
 const { web3 } = require("../lib/web3");
+
+const storage = window.sessionStorage;
 
 class App extends Component {
   state = {
@@ -24,10 +26,15 @@ class App extends Component {
     },
     loader: "",
     hide: "hide",
-    loaderMsg: "",
-    pt: true,
-    lang: require("../language/pt")
+    loaderMsg: ""
   };
+
+  componentWillMount() {
+    if (!storage.lang) {
+      storage.setItem("lang", JSON.stringify(require("../language/pt")));
+      storage.setItem("pt", "true");
+    }
+  }
 
   async componentDidMount() {
     const account = await web3.eth.getAccounts();
@@ -38,7 +45,8 @@ class App extends Component {
   }
 
   verifyAccount = async account => {
-    const { lang } = this.state;
+    //const lang = JSON.parse(storage.getItem("lang"));
+    const lang = JSON.parse(storage.getItem("lang"));
     if (account[0]) {
       await this.isCollegiate();
       if (this.state.isCollegiate) {
@@ -56,19 +64,19 @@ class App extends Component {
   };
 
   changeLanguage = async () => {
-    if (this.state.pt) {
-      this.setState({ lang: require("../language/en") });
-      this.setState({ pt: false });
+    if (storage.pt === "true") {
+      storage.setItem("lang", JSON.stringify(require("../language/en")));
+      storage.setItem("pt", "false");
     } else {
-      this.setState({ lang: require("../language/pt") });
-      this.setState({ pt: true });
+      storage.setItem("lang", JSON.stringify(require("../language/pt")));
+      storage.setItem("pt", "true");
     }
     const account = await web3.eth.getAccounts();
     this.verifyAccount(account);
   };
 
   async isStudent() {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     const json = {
       studentAddress: this.state.actualAccount
     };
@@ -98,7 +106,7 @@ class App extends Component {
   }
 
   async isCollegiate() {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     const json = {
       address: this.state.actualAccount
     };
@@ -128,7 +136,7 @@ class App extends Component {
   }
 
   updateEnrollmentList = async () => {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     this.loaderOn(lang.MSG_LISTING_ENROLLMENTS);
     try {
       let response = await fetch("/enrollment/list");
@@ -150,7 +158,7 @@ class App extends Component {
   };
 
   onEnrollmentClick = async event => {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     let json = {
       contract: event.target.innerHTML
     };
@@ -180,7 +188,7 @@ class App extends Component {
   };
 
   onEdit = async () => {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     this.loaderOn(lang.MSG_EDITING_ENROLLMENT);
     window.M.toast({ html: lang.MSG_DATA_SENT });
     try {
@@ -210,7 +218,7 @@ class App extends Component {
   };
 
   onClick = async () => {
-    const { lang } = this.state;
+    const lang = JSON.parse(storage.getItem("lang"));
     this.loaderOn(lang.MSG_ADDING_NEW_ENROLLMENT);
     window.M.toast({ html: lang.MSG_DATA_SENT });
     try {
@@ -252,10 +260,12 @@ class App extends Component {
       loader,
       hide,
       loaderMsg,
-      status,
-      lang
+      status
     } = this.state;
-    if (isCollegiate != undefined && !isCollegiate) {
+
+    const lang = JSON.parse(storage.lang);
+
+    if (isCollegiate !== undefined && !isCollegiate) {
       return (
         <div>
           <Navbar
@@ -265,14 +275,10 @@ class App extends Component {
             lang={lang}
           />
 
-          <div className="container row center">
-            <label className="col s12">{lang.MSG_NO_PAGE_PERMISSION}</label>
-            <div className="col s12">
-              <a href="/" className="waves-effect waves-light btn">
-                refresh
-              </a>
-            </div>
-          </div>
+          <CardWarning
+            title="Sem permissão"
+            content={lang.MSG_NO_PAGE_PERMISSION}
+          />
         </div>
       );
     }
@@ -308,7 +314,13 @@ class App extends Component {
         </div>
       );
     } else {
-      return <NotLogged />;
+      return (
+        <CardWarning
+          title="Login Required"
+          content="Please, Login on Metamask to use the system. Then refresh the
+                page"
+        />
+      );
     }
   }
 }
