@@ -36,7 +36,7 @@ module.exports = {
   MSG_ADDING_NEW_ENROLLMENT: "Adicionando nova matrícula",
   MSG_ENROLLMENT_ADDED: "Matrícula adicionada",
   MSG_NO_PAGE_PERMISSION:
-    "Desculpa, mas esta conta não tem permissão para acessar a página.",
+    "Desculpa, esta conta não tem permissão para acessar a página.",
 
   /* ERROR MESSAGES */
   ERR_VERIFYING_ACCOUNT: "Erro ao verificar conta",
