@@ -7,17 +7,16 @@ class NotLogged extends Component {
       marginTop: 100
     };
 
+    const { title, content } = this.props;
+
     return (
       <div style={style} className="container row center">
         <div className="col s6 offset-s3">
           <div className="card white">
             <div className="card-content black-text">
-              <span className="card-title">Login Required</span>
-              <MetamaskLogo width={200} height={100} move={true} />
-              <p>
-                Please, Login on Metamask to use the system. Then refresh the
-                page
-              </p>
+              <span className="card-title">{title}</span>
+              <MetamaskLogo width={200} height={100} move={true} id="1" />
+              <p>{content}</p>
               <br />
               <a href="" className="waves-effect waves-light btn">
                 refresh
