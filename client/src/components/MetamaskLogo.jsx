@@ -3,7 +3,7 @@ const ModelViewer = require("metamask-logo");
 
 class MetamaskLogo extends Component {
   componentDidMount() {
-    const { width, height, move } = this.props;
+    const { width, height, move, id } = this.props;
 
     // To render with fixed dimensions:
     let viewer = ModelViewer({
@@ -23,7 +23,7 @@ class MetamaskLogo extends Component {
     });
 
     // add viewer to DOM
-    let container = document.getElementById("logo-container");
+    let container = document.getElementById("logo-container" + id);
     container.appendChild(viewer.container);
 
     // look at something on the page
@@ -40,7 +40,8 @@ class MetamaskLogo extends Component {
   }
 
   render() {
-    return <div id="logo-container" />;
+    const { id } = this.props;
+    return <div id={"logo-container" + id} />;
   }
 }
 
