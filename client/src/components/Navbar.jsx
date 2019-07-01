@@ -28,7 +28,7 @@ class Navbar extends Component {
         <div className="nav-wrapper row white">
           <div className="brand-logo black-text row">
             <div className="col s2" style={logoStyle}>
-              <MetamaskLogo width={50} height={40} move={false} />
+              <MetamaskLogo width={50} height={40} move={false} id="2" />
             </div>
             <label className="col s10 hide-on-med-and-down">
               {lang.NAV_ADDRESS}: {address.toLowerCase()}
@@ -58,7 +58,7 @@ class Navbar extends Component {
             </li>
             <li>
               <a
-                class="waves-effect waves-light btn-small grey"
+                className="waves-effect waves-light btn-small grey"
                 onClick={onLanguageChange}
               >
                 {lang.LANG_BUTTON_NAME}
