@@ -41,8 +41,6 @@ class App extends Component {
     this.setState({
       actualAccount: account[0]
     });
-    console.log(account);
-    console.log(account[0]);
     await this.verifyAccount(account);
   }
 
