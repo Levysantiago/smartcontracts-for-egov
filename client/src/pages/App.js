@@ -278,8 +278,9 @@ class App extends Component {
           />
 
           <CardWarning
-            title="Sem permissão"
+            title={lang.CARD_NO_PERMISSION_TITLE}
             content={lang.MSG_NO_PAGE_PERMISSION}
+            buttonName={lang.REFRESH_BTN_NAME}
           />
         </div>
       );
@@ -318,8 +319,9 @@ class App extends Component {
     } else {
       return (
         <CardWarning
-          title="Login Required"
+          title={lang.CARD_LOGIN_REQUIRED_TITLE}
           content={lang.MSG_NO_METAMASK_LOGIN}
+          buttonName={lang.REFRESH_BTN_NAME}
         />
       );
     }
