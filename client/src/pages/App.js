@@ -41,6 +41,8 @@ class App extends Component {
     this.setState({
       actualAccount: account[0]
     });
+    console.log(account);
+    console.log(account[0]);
     await this.verifyAccount(account);
   }
 
@@ -317,8 +319,7 @@ class App extends Component {
       return (
         <CardWarning
           title="Login Required"
-          content="Please, Login on Metamask to use the system. Then refresh the
-                page"
+          content={lang.MSG_NO_METAMASK_LOGIN}
         />
       );
     }
