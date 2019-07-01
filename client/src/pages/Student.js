@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import EnrollmentCard from "../components/EnrollmentCard";
 import Loader from "../components/Loader";
 import Input from "../components/Input";
-import NotLogged from "../components/NotLogged";
+import CardWarning from "../components/CardWarning";
 import Navbar from "../components/Navbar";
 const { web3 } = require("../lib/web3");
+
+const storage = window.sessionStorage;
 
 class Student extends Component {
   state = {
@@ -53,6 +55,18 @@ class Student extends Component {
       hide: "",
       hideLoader: "hide"
     });
+  };
+
+  changeLanguage = async () => {
+    if (storage.pt === "true") {
+      storage.setItem("lang", JSON.stringify(require("../language/en")));
+      storage.setItem("pt", "false");
+    } else {
+      storage.setItem("lang", JSON.stringify(require("../language/pt")));
+      storage.setItem("pt", "true");
+    }
+    const account = await web3.eth.getAccounts();
+    this.verifyAccount(account);
   };
 
   async isCollegiate() {
@@ -307,6 +321,11 @@ class Student extends Component {
       actualAccount: account[0]
     });
 
+    await this.verifyAccount(account);
+  }
+
+  verifyAccount = async account => {
+    const lang = JSON.parse(storage.getItem("lang"));
     if (account[0]) {
       await this.isCollegiate();
       if (this.state.isCollegiate) {
@@ -323,7 +342,7 @@ class Student extends Component {
       }
       await this.getEnrollmentInfo();
     }
-  }
+  };
 
   getEnrollmentCard() {
     const { enrollment, hide, hideSubjects } = this.state;
@@ -356,11 +375,19 @@ class Student extends Component {
       status
     } = this.state;
 
+    const lang = JSON.parse(storage.lang);
+
     if (actualAccount) {
       if (isStudent === undefined || isStudent || isAllowed) {
         return (
           <div>
-            <Navbar address={actualAccount} status={status} />
+            <Navbar
+              address={actualAccount}
+              status={status}
+              onLanguageChange={this.changeLanguage}
+              lang={lang}
+            />
+
             <div className="container row">
               <h1 className="col s12 center">Enrollment Proof Page</h1>
               {this.getEnrollmentCard()}
@@ -373,7 +400,12 @@ class Student extends Component {
       } else {
         return (
           <div>
-            <Navbar address={actualAccount} status={status} />
+            <Navbar
+              address={actualAccount}
+              status={status}
+              onLanguageChange={this.changeLanguage}
+              lang={lang}
+            />
 
             <div className="container">
               <div className={"row " + hide}>
@@ -409,7 +441,13 @@ class Student extends Component {
         );
       }
     } else {
-      return <NotLogged />;
+      return (
+        <CardWarning
+          title="Login Required"
+          content="Please, Login on Metamask to use the system. Then refresh the
+                page"
+        />
+      );
     }
   }
 }
