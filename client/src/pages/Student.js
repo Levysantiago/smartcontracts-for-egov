@@ -70,11 +70,12 @@ class Student extends Component {
   };
 
   async isCollegiate() {
+    const lang = JSON.parse(storage.lang);
     const json = {
       address: this.state.actualAccount
     };
     try {
-      this.loaderOn("Verificando conta");
+      this.loaderOn(lang.MSG_ACCOUNT_VERIFICATION);
       let response = await fetch("/isCollegiate", {
         method: "post",
         headers: {
@@ -89,21 +90,22 @@ class Student extends Component {
         //console.log(info);
         this.setState({ isCollegiate: info });
       } else {
-        window.M.toast({ html: "Erro ao verificar conta" });
+        window.M.toast({ html: lang.ERR_VERIFYING_ACCOUNT });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao verificar conta" });
+      window.M.toast({ html: lang.ERR_VERIFYING_ACCOUNT });
       console.error(e.message);
     }
     this.loaderOff();
   }
 
   async isStudent() {
+    const lang = JSON.parse(storage.lang);
     const json = {
       studentAddress: this.state.actualAccount
     };
     try {
-      this.loaderOn("Verificando conta");
+      this.loaderOn(lang.MSG_ACCOUNT_VERIFICATION);
       let response = await fetch("/isStudent", {
         method: "post",
         headers: {
@@ -118,22 +120,23 @@ class Student extends Component {
         //console.log(info);
         this.setState({ isStudent: info, hideSubjects: false });
       } else {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao enviar dados" });
+      window.M.toast({ html: lang.ERR_SENDING_DATA });
       console.error(e.message);
     }
     this.loaderOff();
   }
 
   async isAllowed() {
+    const lang = JSON.parse(storage.lang);
     const json = {
       studentAddress: this.state.studentAddress,
       genericAddress: this.state.actualAccount
     };
     try {
-      this.loaderOn("Verificando permissão");
+      this.loaderOn(lang.MSG_PERMISSION_VERIFICATION);
       let response = await fetch("/enrollment/allowed", {
         method: "post",
         headers: {
@@ -145,14 +148,14 @@ class Student extends Component {
       if (response.status === 200) {
         let info = await response.json();
         if (!info) {
-          window.M.toast({ html: "No permission for this enrollment" });
+          window.M.toast({ html: lang.MSG_NO_ENROLLMENT_PERMISSION });
         }
         this.setState({ isAllowed: info, hideSubjects: true });
       } else {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao enviar dados" });
+      window.M.toast({ html: lang.ERR_SENDING_DATA });
       console.error(e.message);
     }
     this.loaderOff();
@@ -180,6 +183,7 @@ class Student extends Component {
   };
 
   addSubject = async () => {
+    const lang = JSON.parse(storage.lang);
     const { code, subjectName, credit, schedule, room } = this.state.subject;
     const json = {
       contract: this.state.enrollment.contractAddress,
@@ -193,7 +197,7 @@ class Student extends Component {
       }
     };
     try {
-      this.loaderOn("Adding new subject");
+      this.loaderOn(lang.MSG_ADDING_SUBJECT);
       let response = await fetch("/enrollment/add/subject", {
         method: "post",
         headers: {
@@ -204,25 +208,26 @@ class Student extends Component {
       });
       if (response.status === 200) {
         await this.getEnrollmentInfo();
-        window.M.toast({ html: "Subject added!" });
+        window.M.toast({ html: lang.MSG_SUBJECT_ADDED });
       } else {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao enviar dados" });
+      window.M.toast({ html: lang.ERR_SENDING_DATA });
       console.error(e.message);
     }
     this.loaderOff();
   };
 
   onClickAllow = async () => {
+    const lang = JSON.parse(storage.lang);
     const { allowedAddress } = this.state;
     const json = {
       contract: this.state.enrollment.contractAddress,
       allowedAddress: allowedAddress
     };
     try {
-      this.loaderOn("Allowing address");
+      this.loaderOn(lang.MSG_ALLOWING_ADDRESS);
       let response = await fetch("/enrollment/allow", {
         method: "post",
         headers: {
@@ -232,26 +237,27 @@ class Student extends Component {
         body: JSON.stringify(json)
       });
       if (response.status === 200) {
-        window.M.toast({ html: "Address allowed" });
+        window.M.toast({ html: lang.MSG_ADDRESS_ALLOWED });
         await this.getEnrollmentInfo();
       } else {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao enviar dados" });
+      window.M.toast({ html: lang.ERR_SENDING_DATA });
       console.error(e.message);
     }
     this.loaderOff();
   };
 
   onClickDisallow = async () => {
+    const lang = JSON.parse(storage.lang);
     const { allowedAddress } = this.state;
     const json = {
       contract: this.state.enrollment.contractAddress,
       disallowedAddress: allowedAddress
     };
     try {
-      this.loaderOn("Disallowing address");
+      this.loaderOn(lang.MSG_DISALLOWING_ADDRESS);
       let response = await fetch("/enrollment/disallow", {
         method: "post",
         headers: {
@@ -261,19 +267,20 @@ class Student extends Component {
         body: JSON.stringify(json)
       });
       if (response.status === 200) {
-        window.M.toast({ html: "Address disallowed" });
+        window.M.toast({ html: lang.MSG_ADDRESS_DISALLOWED });
         await this.getEnrollmentInfo();
       } else {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
       }
     } catch (e) {
-      window.M.toast({ html: "Erro ao enviar dados" });
+      window.M.toast({ html: lang.ERR_SENDING_DATA });
       console.error(e.message);
     }
     this.loaderOff();
   };
 
   async getEnrollmentInfo() {
+    const lang = JSON.parse(storage.lang);
     let studentAddress = this.state.actualAccount;
     if (this.state.studentAddress) {
       await this.isAllowed();
@@ -288,7 +295,7 @@ class Student extends Component {
           studentAddress: studentAddress
         };
 
-        this.loaderOn("Obtendo informações");
+        this.loaderOn(lang.MSG_GETTING_INFO);
         let response = await fetch("/enrollment/infoByStudent", {
           method: "post",
           headers: {
@@ -305,10 +312,10 @@ class Student extends Component {
           console.log(info);
           this.setState({ enrollment: info });
         } else {
-          window.M.toast({ html: "Erro ao enviar dados" });
+          window.M.toast({ html: lang.ERR_SENDING_DATA });
         }
       } catch (e) {
-        window.M.toast({ html: "Erro ao enviar dados" });
+        window.M.toast({ html: lang.ERR_SENDING_DATA });
         console.error(e.message);
       }
       this.loaderOff();
@@ -389,7 +396,7 @@ class Student extends Component {
             />
 
             <div className="container row">
-              <h1 className="col s12 center">Enrollment Proof Page</h1>
+              <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
               {this.getEnrollmentCard()}
               <div className={hideLoader}>
                 <Loader state={loader} msg={loaderMsg} />
@@ -409,10 +416,9 @@ class Student extends Component {
 
             <div className="container">
               <div className={"row " + hide}>
-                <h1 className="col s12 center">Enrollment Proof Page</h1>
+                <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
                 <label className="col s12 center">
-                  Você não é estudante. Tente pesquisar uma matrícula para
-                  verificar se tem acesso.
+                  {lang.MSG_YOU_ARE_NOT_STUDENT}
                 </label>
               </div>
               <div className={"row " + hide}>
@@ -420,7 +426,7 @@ class Student extends Component {
                   col="s6"
                   id="student-address"
                   name="student-address"
-                  title="Student Address"
+                  title={lang.INPUT_STUDENT_ADDRESS}
                   onChange={this.onChangeStudentInput.bind(this)}
                 />
               </div>
@@ -429,11 +435,11 @@ class Student extends Component {
                   className="waves-effect waves-light btn col s2"
                   onClick={this.onClickEnrollmentSearch}
                 >
-                  Search
+                  {lang.SEARCH_BTN_NAME}
                 </button>
               </div>
               <div className={"row " + hideLoader}>
-                <h1 className="col s12 center">Enrollment Proof Page</h1>
+                <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
                 <Loader state={loader} msg={loaderMsg} />
               </div>
             </div>
@@ -443,9 +449,9 @@ class Student extends Component {
     } else {
       return (
         <CardWarning
-          title="Login Required"
-          content="Please, Login on Metamask to use the system. Then refresh the
-                page"
+          title={lang.CARD_LOGIN_REQUIRED_TITLE}
+          content={lang.MSG_NO_METAMASK_LOGIN}
+          buttonName={lang.REFRESH_BTN_NAME}
         />
       );
     }
