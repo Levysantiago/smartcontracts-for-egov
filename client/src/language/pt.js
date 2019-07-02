@@ -29,6 +29,7 @@ module.exports = {
   ENR_FRM_BTN_CANCEL: "Cancelar",
   ENR_FRM_BTN_EDIT: "Editar",
 
+  /* SUBJECT INFORMATION */
   SUBJECT_FRM_CODE: "Código",
   SUBJECT_FRM_NAME: "Nome da Matéria",
   SUBJECT_FRM_SUBJECT: "Matéria",
@@ -39,6 +40,7 @@ module.exports = {
   SUBJECT_FRM_METAMASK_ACCOUNT: "Endereço Metamask",
   SUBJECT_FRM_SUBJECTS_LIST: "Lista de Matérias",
 
+  /* OTHER INPUTS */
   INPUT_STUDENT_ADDRESS: "Endereço do aluno",
   INPUT_ALLOW_DISALLOW: "Permitir/Remover acesso",
   INPUT_ADD_NEW_SUBJECT: "Adicionar nova matéria",
