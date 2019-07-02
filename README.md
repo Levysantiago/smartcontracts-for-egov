@@ -6,8 +6,8 @@ This project is build for the [UESC (Universidade Estadual de Santa Cruz)](http:
 
 # Versions
 
-- Node.js: v10.15.3
-- NPM: 6.4.1
+- **Node.js:** v10.15.3
+- **NPM:** 6.4.1
 
 # Organization
 
