@@ -336,15 +336,15 @@ class Student extends Component {
     if (account[0]) {
       await this.isCollegiate();
       if (this.state.isCollegiate) {
-        this.setState({ status: "Colegiado" });
+        this.setState({ status: lang.NAV_STATE_COLLEGIATE });
       } else {
         await this.isStudent();
         /*Atualizando status da conta*/
 
         if (this.state.isStudent) {
-          this.setState({ status: "Student" });
+          this.setState({ status: lang.NAV_STATE_STUDENT });
         } else {
-          this.setState({ status: "Visitor" });
+          this.setState({ status: lang.NAV_STATE_VISITOR });
         }
       }
       await this.getEnrollmentInfo();
@@ -352,6 +352,7 @@ class Student extends Component {
   };
 
   getEnrollmentCard() {
+    const lang = JSON.parse(storage.lang);
     const { enrollment, hide, hideSubjects } = this.state;
     if (enrollment.student) {
       return (
@@ -364,6 +365,7 @@ class Student extends Component {
             onClickDisallow={this.onClickDisallow}
             enrollment={enrollment}
             addSubjectsOff={hideSubjects}
+            lang={lang}
           />
         </div>
       );
