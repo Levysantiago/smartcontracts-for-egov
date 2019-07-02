@@ -7,7 +7,7 @@ class NotLogged extends Component {
       marginTop: 100
     };
 
-    const { title, content } = this.props;
+    const { title, content, buttonName } = this.props;
 
     return (
       <div style={style} className="container row center">
@@ -19,7 +19,7 @@ class NotLogged extends Component {
               <p>{content}</p>
               <br />
               <a href="" className="waves-effect waves-light btn">
-                refresh
+                {buttonName}
               </a>
             </div>
           </div>
