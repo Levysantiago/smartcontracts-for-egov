@@ -26,32 +26,37 @@ class EnrollmentCard extends Component {
   };
 
   allowanceForm = () => {
-    const { onChangeAllowance, onClickAllow, onClickDisallow } = this.props;
+    const {
+      onChangeAllowance,
+      onClickAllow,
+      onClickDisallow,
+      lang
+    } = this.props;
     return (
       <div className="row">
         <div className="col s6">
           <br />
           <span className="card-title grey-text text-darken-4">
-            Allow/Disallow Account
+            {lang.INPUT_ALLOW_DISALLOW}
           </span>
           <Input
             col="s12"
             id="allowedAddress"
             name="allowedAddress"
-            title="Account Address"
+            title={lang.SUBJECT_FRM_METAMASK_ACCOUNT}
             onChange={onChangeAllowance.bind(this)}
           />
           <button
             className="col s4 waves-effect waves-light btn-large"
             onClick={onClickAllow}
           >
-            Allow
+            {lang.ALLOW_BTN_NAME}
           </button>
           <button
             className="col s4 offset-s2 waves-effect waves-light btn-large"
             onClick={onClickDisallow}
           >
-            Disallow
+            {lang.DISALLOW_BTN_NAME}
           </button>
         </div>
       </div>
@@ -59,52 +64,53 @@ class EnrollmentCard extends Component {
   };
 
   newSubjectForm = () => {
-    const { onChange, onAddSubject } = this.props;
+    const { onChange, onAddSubject, lang } = this.props;
     return (
       <div>
         <span className="card-title grey-text text-darken-4">
-          Add new Subject<i className="material-icons right">close</i>
+          {lang.INPUT_ADD_NEW_SUBJECT}
+          <i className="material-icons right">close</i>
         </span>
         <Input
           col="s4"
           id="code"
           name="code"
-          title="Code"
+          title={lang.SUBJECT_FRM_CODE}
           onChange={onChange}
         />
         <Input
           col="s4"
           id="subjectName"
           name="subjectName"
-          title="Subject Name"
+          title={lang.SUBJECT_FRM_NAME}
           onChange={onChange}
         />
         <Input
           col="s4"
           id="class"
           name="class"
-          title="Class"
+          title={lang.SUBJECT_FRM_CLASS}
           onChange={onChange}
         />
         <Input
           col="s4"
           id="credit"
           name="credit"
-          title="Credit"
+          title={lang.SUBJECT_FRM_CREDIT}
           onChange={onChange}
         />
         <Input
           col="s4"
           id="schedule"
           name="schedule"
-          title="Schedule"
+          title={lang.SUBJECT_FRM_SCHEDULE}
           onChange={onChange}
         />
         <Input
           col="s4"
           id="room"
           name="room"
-          title="Room"
+          title={lang.SUBJECT_FRM_ROOM}
           onChange={onChange}
         />
         <button
@@ -113,7 +119,7 @@ class EnrollmentCard extends Component {
             await onAddSubject();
           }}
         >
-          Add
+          {lang.SUBJECT_ADD_BTN_NAME}
         </button>
 
         {this.allowanceForm()}
@@ -122,23 +128,24 @@ class EnrollmentCard extends Component {
   };
 
   render() {
+    const { lang } = this.props;
     return (
       <div className="col s12">
         <div className="card white">
           <div className="card-content black-text row">
-            <span className="card-title">Enrollment Proof</span>
+            <span className="card-title">{lang.ENROLLMENT_CARD_TITLE}</span>
             <Input
               col="s6"
               id="creator"
               name="creator"
-              title="Institute Address"
+              title={lang.ENR_FRM_METAMASK_INSTITUTE_ACCOUNT}
               disabled={true}
             />
             <Input
               col="s6"
               id="contract"
               name="contract"
-              title="Contract Address"
+              title={lang.ENR_FRM_METAMASK_CONTRACT_ACCOUNT}
               disabled={true}
             />
 
@@ -146,21 +153,21 @@ class EnrollmentCard extends Component {
               col="s4"
               id="account"
               name="account"
-              title="Student Account"
+              title={lang.ENR_FRM_METAMASK_STUDENT_ACCOUNT}
               disabled={true}
             />
             <Input
               col="s6"
               id="name"
               name="name"
-              title="Name"
+              title={lang.ENR_FRM_NAME}
               disabled={true}
             />
             <Input
               col="s2"
               id="ingress"
               name="ingress"
-              title="Ingress"
+              title={lang.ENR_FRM_INGRESS}
               disabled={true}
             />
 
@@ -168,34 +175,34 @@ class EnrollmentCard extends Component {
               col="s8"
               id="course"
               name="course"
-              title="Course"
+              title={lang.ENR_FRM_COURSE}
               disabled={true}
             />
             <Input
               col="s2"
               id="period"
               name="period"
-              title="Period"
+              title={lang.ENR_FRM_PERIOD}
               disabled={true}
             />
             <Input
               col="s2"
               id="shift"
               name="shift"
-              title="Shift"
+              title={lang.ENR_FRM_SCHEDULE}
               disabled={true}
             />
             {/*Subjects*/}
-            <span className="card-title">Subjects</span>
+            <span className="card-title">{lang.SUBJECT_FRM_SUBJECTS_LIST}</span>
             <table>
               <thead>
                 <tr>
-                  <th>Code</th>
-                  <th>Subject</th>
-                  <th>Class</th>
-                  <th>Credit</th>
-                  <th>Schedule</th>
-                  <th>Room</th>
+                  <th>{lang.SUBJECT_FRM_CODE}</th>
+                  <th>{lang.SUBJECT_FRM_SUBJECT}</th>
+                  <th>{lang.SUBJECT_FRM_CLASS}</th>
+                  <th>{lang.SUBJECT_FRM_CREDIT}</th>
+                  <th>{lang.SUBJECT_FRM_SCHEDULE}</th>
+                  <th>{lang.SUBJECT_FRM_ROOM}</th>
                 </tr>
               </thead>
 
@@ -215,7 +222,7 @@ class EnrollmentCard extends Component {
           </div>
           <div id="reveal-button" className="card-action">
             <a href="javascript:void(0)" className="activator">
-              Management
+              {lang.SUBJECTS_MANAGEMENT_BTN_NAME}
             </a>
           </div>
           <div id="subjects-reveal" className="card-reveal">
