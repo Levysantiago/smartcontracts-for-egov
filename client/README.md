@@ -1,6 +1,6 @@
 # About
 
-This is the client side, a website that comunicates with the server side to manage the smart contract.
+This is the client side, a website that communicates with the server side to manage the smart contract.
 
 # Dependences
 
