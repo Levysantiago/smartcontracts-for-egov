@@ -21,18 +21,7 @@ class Home extends Component {
         typed: false
       }
     ],
-    images: [
-      { id: 1, filename: "nodejs.jpg", link: "https://nodejs.org" },
-      { id: 2, filename: "react.jpg", link: "https://pt-br.reactjs.org/" },
-      { id: 3, filename: "ethereum.jpg", link: "https://www.ethereum.org/" },
-      { id: 4, filename: "metamask.jpg", link: "https://metamask.io/" },
-      { id: 5, filename: "github.jpg", link: "https://github.com" },
-      {
-        id: 6,
-        filename: "web3.jpg",
-        link: "https://web3js.readthedocs.io"
-      }
-    ]
+    images: []
   };
 
   async isStudent() {
@@ -106,14 +95,48 @@ class Home extends Component {
     }
   }
 
-  async componentDidMount() {
-    const account = await web3.eth.getAccounts();
-    this.setState({
-      actualAccount: account[0]
-    });
-
+  setUpContent() {
     const lang = JSON.parse(storage.getItem("lang"));
-    const { images } = this.state;
+
+    let images = [
+      {
+        id: 1,
+        filename: "nodejs.jpg",
+        link: "https://nodejs.org",
+        alt: lang.IMG_ALT_NODE
+      },
+      {
+        id: 2,
+        filename: "react.jpg",
+        link: "https://pt-br.reactjs.org/",
+        alt: lang.IMG_ALT_REACT
+      },
+      {
+        id: 3,
+        filename: "ethereum.jpg",
+        link: "https://www.ethereum.org/",
+        alt: lang.IMG_ALT_ETHEREUM
+      },
+      {
+        id: 4,
+        filename: "metamask.jpg",
+        link: "https://metamask.io/",
+        alt: lang.IMG_ALT_METAMASK
+      },
+      {
+        id: 5,
+        filename: "github.jpg",
+        link: "https://github.com",
+        alt: lang.IMG_ALT_GITHUB
+      },
+      {
+        id: 6,
+        filename: "web3.jpg",
+        link: "https://web3js.readthedocs.io",
+        alt: lang.IMG_ALT_WEB3
+      }
+    ];
+
     let contents = [
       {
         id: 1,
@@ -139,7 +162,15 @@ class Home extends Component {
       }
     ];
 
-    this.setState({ contents });
+    this.setState({ contents, images });
+  }
+
+  async componentDidMount() {
+    const account = await web3.eth.getAccounts();
+    this.setState({
+      actualAccount: account[0]
+    });
+
     this.defineStatus();
   }
 
@@ -148,6 +179,8 @@ class Home extends Component {
       storage.setItem("lang", JSON.stringify(require("../language/pt")));
       storage.setItem("pt", "true");
     }
+
+    this.setUpContent();
   }
 
   changeLanguage = async () => {
@@ -176,7 +209,7 @@ class Home extends Component {
 
         <Contents contents={contents} />
 
-        <Footer />
+        <Footer lang={lang} />
       </div>
     );
   }

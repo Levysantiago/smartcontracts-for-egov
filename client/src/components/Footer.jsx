@@ -13,6 +13,8 @@ class Footer extends Component {
   }
 
   render() {
+    const { lang } = this.props;
+
     return (
       <div>
         {/* Divider */}
@@ -35,7 +37,7 @@ class Footer extends Component {
                   <img
                     width="50"
                     src={require("../images/uesc.png")}
-                    alt="UESC University Symbol"
+                    alt={lang.IMG_ALT_UESC}
                   />
                 </a>
               </div>

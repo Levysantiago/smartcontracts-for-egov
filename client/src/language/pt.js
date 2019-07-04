@@ -10,6 +10,15 @@ module.exports = {
   HOME_OBJECTIVES:
     "O objetivo deste projeto de pesquisa é propor o uso do blockchain como mecanismo de autenticação e salvaguarda de históricos de registros, atuando de forma distribuída confiável e segura para realização de transações entre participantes que não necessariamente têm confiança entre si e que estão dispersos em larga escala numa rede P2P. Isso permite que o Estado possa interagir diretamente com o cidadão, sem a necessidade de elementos intermediários. Este novo modelo de transações tem impacto disruptivo e atinge diretamente diversos setores do governo, que podem simplificar mecanismos burocráticos, tornando a administração pública menos burocrática e mais eficiente. A meta é criar contratos inteligentes que possam substituir os tradicionais contratos. Nestes novos instrumentos, monitorados eletronica e diuturnamente, a programação é a lei que será obedecida fielmente pela máquina. Objetiva-se, portanto, propor uma Blockchain, com suporte a contratos inteligentes e Internet das Coisas, ancorada geograficamente em pontos estratégicos do Estado, capaz de gerenciar estes contratos inteligentes em diversas áreas governamentais como Educação, Saúde, Fazenda e Administração.",
 
+  /* IMAGES ALT */
+  IMG_ALT_NODE: "Símbolo do framework Node.js",
+  IMG_ALT_REACT: "Símbolo do framework React.js",
+  IMG_ALT_ETHEREUM: "Símbolo da plataforma Ethereum",
+  IMG_ALT_METAMASK: "Símbolo da plataforma Metamask",
+  IMG_ALT_GITHUB: "Símbolo da plataforma GitHub",
+  IMG_ALT_WEB3: "Símbolo do framework Web3.js",
+  IMG_ALT_UESC: "Símbolo da UESC",
+
   /*PAGES TITLES*/
   ENROLLMENT_PAGE_TITLE: "Comprovante de Matrícula",
 
