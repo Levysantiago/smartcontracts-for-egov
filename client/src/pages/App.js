@@ -4,6 +4,8 @@ import ListCard from "../components/ListCard";
 import Loader from "../components/Loader";
 import CardWarning from "../components/CardWarning";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+const colors = require("../lib/colors");
 const { web3 } = require("../lib/web3");
 
 const storage = window.sessionStorage;
@@ -71,6 +73,7 @@ class App extends Component {
       storage.setItem("lang", JSON.stringify(require("../language/pt")));
       storage.setItem("pt", "true");
     }
+    window.location.reload();
     const account = await web3.eth.getAccounts();
     this.verifyAccount(account);
   };
@@ -92,8 +95,6 @@ class App extends Component {
       });
       if (response.status !== 204) {
         let info = await response.json();
-        //window.M.toast({ html: "Conta verificada" });
-        //console.log(info);
         this.setState({ isStudent: info });
       } else {
         window.M.toast({ html: lang.ERR_VERIFYING_ACCOUNT });
@@ -250,7 +251,7 @@ class App extends Component {
     this.setState({ loader: "", loaderMsg: "", hide: "" });
   };
 
-  render() {
+  getBodyContent() {
     const {
       enrollments,
       edit,
@@ -259,59 +260,44 @@ class App extends Component {
       actualAccount,
       loader,
       hide,
-      loaderMsg,
-      status
+      loaderMsg
     } = this.state;
 
     const lang = JSON.parse(storage.lang);
 
     if (isCollegiate !== undefined && !isCollegiate) {
       return (
-        <div>
-          <Navbar
-            address={actualAccount}
-            status={status}
-            onLanguageChange={this.changeLanguage}
-            lang={lang}
-          />
-
-          <CardWarning
-            title={lang.CARD_NO_PERMISSION_TITLE}
-            content={lang.MSG_NO_PAGE_PERMISSION}
-            buttonName={lang.REFRESH_BTN_NAME}
-          />
-        </div>
+        <CardWarning
+          title={lang.CARD_NO_PERMISSION_TITLE}
+          content={lang.MSG_NO_PAGE_PERMISSION}
+          buttonName={lang.REFRESH_BTN_NAME}
+          buttonColor={colors.NORMAL_BUTTON}
+        />
       );
     }
     if (actualAccount) {
       return (
-        <div className="App">
-          <Navbar
-            address={actualAccount}
-            status={status}
-            onLanguageChange={this.changeLanguage}
-            lang={lang}
-          />
-          <div className="container row center">
-            <div className={hide}>
-              <EnrollmentForm
-                onClick={this.onClick}
-                onEdit={this.onEdit}
-                onCancelEdit={this.onCancelEdit}
-                onChange={this.onChange}
-                edit={edit}
-                enrollment={enrollment}
-                lang={lang}
-              />
-              <ListCard
-                title={lang.CARD_LIST_TITLE}
-                list={enrollments}
-                onClick={this.onEnrollmentClick}
-              />
-            </div>
-            <br />
-            <Loader state={loader} msg={loaderMsg} />
+        <div className="container row center">
+          <div className={hide}>
+            <EnrollmentForm
+              onClick={this.onClick}
+              onEdit={this.onEdit}
+              onCancelEdit={this.onCancelEdit}
+              onChange={this.onChange}
+              edit={edit}
+              enrollment={enrollment}
+              lang={lang}
+              buttonColor={colors.NORMAL_BUTTON}
+              cancelButtonColor={colors.CANCEL_BUTTON}
+            />
+            <ListCard
+              title={lang.CARD_LIST_TITLE}
+              list={enrollments}
+              onClick={this.onEnrollmentClick}
+            />
           </div>
+          <br />
+          <Loader state={loader} msg={loaderMsg} />
         </div>
       );
     } else {
@@ -320,9 +306,30 @@ class App extends Component {
           title={lang.CARD_LOGIN_REQUIRED_TITLE}
           content={lang.MSG_NO_METAMASK_LOGIN}
           buttonName={lang.REFRESH_BTN_NAME}
+          buttonColor={colors.NORMAL_BUTTON}
         />
       );
     }
+  }
+
+  render() {
+    const { actualAccount, status } = this.state;
+
+    const lang = JSON.parse(storage.lang);
+
+    return (
+      <div>
+        <Navbar
+          address={actualAccount}
+          status={status}
+          onLanguageChange={this.changeLanguage}
+          lang={lang}
+        />
+        {this.getBodyContent()}
+
+        <Footer />
+      </div>
+    );
   }
 }
 

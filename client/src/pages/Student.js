@@ -4,6 +4,8 @@ import Loader from "../components/Loader";
 import Input from "../components/Input";
 import CardWarning from "../components/CardWarning";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+const colors = require("../lib/colors");
 const { web3 } = require("../lib/web3");
 
 const storage = window.sessionStorage;
@@ -65,6 +67,7 @@ class Student extends Component {
       storage.setItem("lang", JSON.stringify(require("../language/pt")));
       storage.setItem("pt", "true");
     }
+    window.location.reload();
     const account = await web3.eth.getAccounts();
     this.verifyAccount(account);
   };
@@ -116,8 +119,6 @@ class Student extends Component {
       });
       if (response.status === 200) {
         let info = await response.json();
-        //window.M.toast({ html: "Conta verificada" });
-        //console.log(info);
         this.setState({ isStudent: info, hideSubjects: false });
       } else {
         window.M.toast({ html: lang.ERR_SENDING_DATA });
@@ -365,6 +366,9 @@ class Student extends Component {
             onClickDisallow={this.onClickDisallow}
             enrollment={enrollment}
             addSubjectsOff={hideSubjects}
+            buttonColor={colors.NORMAL_BUTTON}
+            cancelButtonColor={colors.CANCEL_BUTTON}
+            cardLinkColor={colors.CARD_LINK}
             lang={lang}
           />
         </div>
@@ -372,7 +376,7 @@ class Student extends Component {
     }
   }
 
-  render() {
+  getBodyContent() {
     const {
       actualAccount,
       isStudent,
@@ -380,8 +384,7 @@ class Student extends Component {
       loader,
       loaderMsg,
       hide,
-      hideLoader,
-      status
+      hideLoader
     } = this.state;
 
     const lang = JSON.parse(storage.lang);
@@ -389,61 +392,43 @@ class Student extends Component {
     if (actualAccount) {
       if (isStudent === undefined || isStudent || isAllowed) {
         return (
-          <div>
-            <Navbar
-              address={actualAccount}
-              status={status}
-              onLanguageChange={this.changeLanguage}
-              lang={lang}
-            />
-
-            <div className="container row">
-              <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
-              {this.getEnrollmentCard()}
-              <div className={hideLoader}>
-                <Loader state={loader} msg={loaderMsg} />
-              </div>
+          <div className="container row">
+            <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
+            {this.getEnrollmentCard()}
+            <div className={hideLoader}>
+              <Loader state={loader} msg={loaderMsg} />
             </div>
           </div>
         );
       } else {
         return (
-          <div>
-            <Navbar
-              address={actualAccount}
-              status={status}
-              onLanguageChange={this.changeLanguage}
-              lang={lang}
-            />
-
-            <div className="container">
-              <div className={"row " + hide}>
-                <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
-                <label className="col s12 center">
-                  {lang.MSG_YOU_ARE_NOT_STUDENT}
-                </label>
-              </div>
-              <div className={"row " + hide}>
-                <Input
-                  col="s6"
-                  id="student-address"
-                  name="student-address"
-                  title={lang.INPUT_STUDENT_ADDRESS}
-                  onChange={this.onChangeStudentInput.bind(this)}
-                />
-              </div>
-              <div className={"row " + hide}>
-                <button
-                  className="waves-effect waves-light btn col s2"
-                  onClick={this.onClickEnrollmentSearch}
-                >
-                  {lang.SEARCH_BTN_NAME}
-                </button>
-              </div>
-              <div className={"row " + hideLoader}>
-                <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
-                <Loader state={loader} msg={loaderMsg} />
-              </div>
+          <div className="container">
+            <div className={"row " + hide}>
+              <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
+              <label className="col s12 center">
+                {lang.MSG_YOU_ARE_NOT_STUDENT}
+              </label>
+            </div>
+            <div className={"row " + hide}>
+              <Input
+                col="s6"
+                id="student-address"
+                name="student-address"
+                title={lang.INPUT_STUDENT_ADDRESS}
+                onChange={this.onChangeStudentInput.bind(this)}
+              />
+            </div>
+            <div className={"row " + hide}>
+              <button
+                className="waves-effect waves-light btn col s2"
+                onClick={this.onClickEnrollmentSearch}
+              >
+                {lang.SEARCH_BTN_NAME}
+              </button>
+            </div>
+            <div className={"row " + hideLoader}>
+              <h1 className="col s12 center">{lang.ENROLLMENT_PAGE_TITLE}</h1>
+              <Loader state={loader} msg={loaderMsg} />
             </div>
           </div>
         );
@@ -454,9 +439,30 @@ class Student extends Component {
           title={lang.CARD_LOGIN_REQUIRED_TITLE}
           content={lang.MSG_NO_METAMASK_LOGIN}
           buttonName={lang.REFRESH_BTN_NAME}
+          buttonColor={colors.NORMAL_BUTTON}
         />
       );
     }
+  }
+
+  render() {
+    const { actualAccount, status } = this.state;
+
+    const lang = JSON.parse(storage.lang);
+
+    return (
+      <div>
+        <Navbar
+          address={actualAccount}
+          status={status}
+          onLanguageChange={this.changeLanguage}
+          lang={lang}
+        />
+        {this.getBodyContent()}
+
+        <Footer />
+      </div>
+    );
   }
 }
 
