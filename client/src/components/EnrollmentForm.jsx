@@ -16,15 +16,15 @@ class EnrollmentForm extends Component {
     window.M.FormSelect.init(elems, options);
   };
 
-  printTitle = edit => {
+  /*printTitle = (edit, lang) => {
     if (edit) {
-      return <span className="card-title">Editar Matrícula</span>;
+      return <span className="card-title">{lang.ENR_FRM_EDIT_TITLE}</span>;
     } else {
-      return <span className="card-title">Nova Matrícula</span>;
+      return <span className="card-title">{lang.ENR_FRM_TITLE}</span>;
     }
-  };
+  };*/
 
-  printButton = (edit, onclick, onedit) => {
+  /*printButton = (edit, onclick, onedit) => {
     if (edit) {
       return (
         <button
@@ -39,7 +39,7 @@ class EnrollmentForm extends Component {
             this.resetInput(document.getElementById("student"));
           }}
         >
-          Editar
+          {lang.ENR_FRM_BTN_EDIT}
         </button>
       );
     } else {
@@ -56,11 +56,11 @@ class EnrollmentForm extends Component {
             this.resetInput(document.getElementById("student"));
           }}
         >
-          Adicionar
+          {lang.ENR_FRM_BTN_ADD}
         </button>
       );
     }
-  };
+  };*/
 
   printAccountInput = (edit, onchange, value) => {
     if (edit) {
@@ -97,7 +97,7 @@ class EnrollmentForm extends Component {
   }
 
   printAddForm = props => {
-    const { onChange, onClick, lang } = props;
+    const { onChange, onClick, lang, buttonColor } = props;
     return (
       <div className="card white">
         <div className="card-content black-text">
@@ -187,6 +187,7 @@ class EnrollmentForm extends Component {
         <div className="card-action" id="addMatricula">
           <button
             className="waves-effect small waves-light btn"
+            style={{ backgroundColor: buttonColor }}
             onClick={async () => {
               await onClick();
               this.resetInput(document.getElementById("name"));
@@ -205,7 +206,15 @@ class EnrollmentForm extends Component {
   };
 
   printEditForm = props => {
-    const { onChange, onEdit, onCancelEdit, enrollment, lang } = props;
+    const {
+      onChange,
+      onEdit,
+      onCancelEdit,
+      enrollment,
+      lang,
+      buttonColor,
+      cancelButtonColor
+    } = props;
     document.getElementById("name").value = enrollment.name;
     document.getElementById("course").value = enrollment.course;
     document.getElementById("ingress").value = enrollment.ingress;
@@ -216,7 +225,7 @@ class EnrollmentForm extends Component {
     return (
       <div className="card white">
         <div className="card-content black-text">
-          <span className="card-title">Editar Matrícula</span>
+          <span className="card-title">{lang.ENR_FRM_EDIT_TITLE}</span>
           <div className="row">
             <div className="input-field col s12">
               <input
@@ -301,8 +310,11 @@ class EnrollmentForm extends Component {
         </div>
         <div className="card-action" id="addMatricula">
           <button
-            className="waves-effect small waves-light grey btn"
-            style={{ marginRight: "5px" }}
+            className="waves-effect small waves-light btn"
+            style={{
+              marginRight: "5px",
+              backgroundColor: cancelButtonColor
+            }}
             onClick={async () => {
               await onCancelEdit();
               this.resetInput(document.getElementById("name"));
@@ -317,6 +329,7 @@ class EnrollmentForm extends Component {
           </button>
           <button
             className="waves-effect small waves-light btn"
+            style={{ backgroundColor: buttonColor }}
             onClick={async () => {
               await onEdit();
               this.resetInput(document.getElementById("name"));
