@@ -171,7 +171,7 @@ class Home extends Component {
       actualAccount: account[0]
     });
 
-    this.defineStatus();
+    await this.defineStatus();
   }
 
   componentWillMount() {
