@@ -10,7 +10,7 @@ const { web3 } = require("../lib/web3");
 
 const storage = window.sessionStorage;
 
-class App extends Component {
+class Controll extends Component {
   state = {
     enrollments: [],
     actualAccount: "",
@@ -333,4 +333,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Controll;
