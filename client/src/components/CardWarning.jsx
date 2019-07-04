@@ -7,7 +7,7 @@ class NotLogged extends Component {
       marginTop: 100
     };
 
-    const { title, content, buttonName } = this.props;
+    const { title, content, buttonName, buttonColor } = this.props;
 
     return (
       <div style={style} className="container row center">
@@ -18,7 +18,11 @@ class NotLogged extends Component {
               <MetamaskLogo width={200} height={100} move={true} id="1" />
               <p>{content}</p>
               <br />
-              <a href="" className="waves-effect waves-light btn">
+              <a
+                href=""
+                className="waves-effect waves-light btn"
+                style={{ backgroundColor: buttonColor }}
+              >
                 {buttonName}
               </a>
             </div>
