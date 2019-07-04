@@ -30,6 +30,8 @@ class EnrollmentCard extends Component {
       onChangeAllowance,
       onClickAllow,
       onClickDisallow,
+      buttonColor,
+      cancelButtonColor,
       lang
     } = this.props;
     return (
@@ -48,15 +50,17 @@ class EnrollmentCard extends Component {
           />
           <button
             className="col s4 waves-effect waves-light btn-large"
-            onClick={onClickAllow}
+            onClick={onClickDisallow}
+            style={{ backgroundColor: cancelButtonColor }}
           >
-            {lang.ALLOW_BTN_NAME}
+            {lang.DISALLOW_BTN_NAME}
           </button>
           <button
             className="col s4 offset-s2 waves-effect waves-light btn-large"
-            onClick={onClickDisallow}
+            onClick={onClickAllow}
+            style={{ backgroundColor: buttonColor }}
           >
-            {lang.DISALLOW_BTN_NAME}
+            {lang.ALLOW_BTN_NAME}
           </button>
         </div>
       </div>
@@ -64,7 +68,7 @@ class EnrollmentCard extends Component {
   };
 
   newSubjectForm = () => {
-    const { onChange, onAddSubject, lang } = this.props;
+    const { onChange, onAddSubject, lang, buttonColor } = this.props;
     return (
       <div>
         <span className="card-title grey-text text-darken-4">
@@ -115,6 +119,7 @@ class EnrollmentCard extends Component {
         />
         <button
           className="waves-effect waves-light btn-large"
+          style={{ backgroundColor: buttonColor }}
           onClick={async () => {
             await onAddSubject();
           }}
@@ -128,7 +133,7 @@ class EnrollmentCard extends Component {
   };
 
   render() {
-    const { lang } = this.props;
+    const { lang, cardLinkColor } = this.props;
     return (
       <div className="col s12">
         <div className="card white">
@@ -221,7 +226,11 @@ class EnrollmentCard extends Component {
             </table>
           </div>
           <div id="reveal-button" className="card-action">
-            <a href="javascript:void(0)" className="activator">
+            <a
+              href="javascript:void(0)"
+              className="activator"
+              style={{ color: cardLinkColor }}
+            >
               {lang.SUBJECTS_MANAGEMENT_BTN_NAME}
             </a>
           </div>
