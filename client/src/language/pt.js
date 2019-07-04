@@ -1,10 +1,22 @@
 module.exports = {
+  /* H0ME CONTENTS */
+  HOME_ABSTRACT_TITLE: "Resumo",
+  HOME_ABOUT_TITLE: "Sobre",
+  HOME_OBJECTIVE_TITLE: "Objetivos",
+  HOME_ABSTRACT:
+    "A blockchain introduz o novo paradigma do consenso sob demanda, onde o conjunto de nós da rede P2P concorda com a ordem em que blocos de transações vão sendo agregados à corrente de blocos, proporcionando um ambiente distribuído confiável, seguro, escalável e imutável para a realização e armazenamento de transações na Internet. A blockchain elimina a necessidade de uma terceira parte confiável e cria digitalmente uma entidade de confiança descentralizada. O caráter disruptivo da tecnologia é imenso e aplicações estão surgindo em diversas áreas: finanças, saúde, artes, governo, etc., além da própria computação. Diversos desafios estão postos e envolvem segurança, privacidade, armazenamento, disponibilidade, melhoria de desempenho, crescimento em escala, sustentabilidade, etc. Este projeto visa pesquisar e construir uma plataforma de blockchain com especial ênfase em ambientes governamentais através da exploração de contratos inteligentes e internet das coisas, criados especialmente para substituir as atividades desempenhadas pelo agente público e que necessitem herdar as características propostas por esta tecnologia.",
+  HOME_ABOUT:
+    "Esta página foi desenvolvida para o projeto de Iniciação Científica da Universidade Estadual de Santa Cruz (UESC).",
+  HOME_OBJECTIVES:
+    "O objetivo deste projeto de pesquisa é propor o uso do blockchain como mecanismo de autenticação e salvaguarda de históricos de registros, atuando de forma distribuída confiável e segura para realização de transações entre participantes que não necessariamente têm confiança entre si e que estão dispersos em larga escala numa rede P2P. Isso permite que o Estado possa interagir diretamente com o cidadão, sem a necessidade de elementos intermediários. Este novo modelo de transações tem impacto disruptivo e atinge diretamente diversos setores do governo, que podem simplificar mecanismos burocráticos, tornando a administração pública menos burocrática e mais eficiente. A meta é criar contratos inteligentes que possam substituir os tradicionais contratos. Nestes novos instrumentos, monitorados eletronica e diuturnamente, a programação é a lei que será obedecida fielmente pela máquina. Objetiva-se, portanto, propor uma Blockchain, com suporte a contratos inteligentes e Internet das Coisas, ancorada geograficamente em pontos estratégicos do Estado, capaz de gerenciar estes contratos inteligentes em diversas áreas governamentais como Educação, Saúde, Fazenda e Administração.",
+
   /*PAGES TITLES*/
   ENROLLMENT_PAGE_TITLE: "Comprovante de Matrícula",
 
   /* NAVBAR INFO */
   NAV_ADDRESS: "Endereço",
   NAV_CONTROLL: "Controle",
+  NAV_HOME: "Home",
   NAV_ENROLLMENT: "Comp. Matrícula",
   NAV_STATE_COLLEGIATE: "Colegiado",
   NAV_STATE_STUDENT: "Estudante",
@@ -12,6 +24,7 @@ module.exports = {
 
   /* ENROLLMENT FORM INFO */
   ENR_FRM_TITLE: "Nova Matrícula",
+  ENR_FRM_EDIT_TITLE: "Editar Matrícula",
   ENR_FRM_NAME: "Nome",
   ENR_FRM_COURSE: "Curso",
   ENR_FRM_INGRESS: "Ingresso",
