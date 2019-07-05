@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import TeamCard from "./TeamCard";
 
 class Footer extends Component {
   titleColor = "white-text text-darken-4";
@@ -60,51 +61,40 @@ class Footer extends Component {
           <div className="container">
             <div className="row">
               {/* Left Side */}
-              <div className="col l6 s12">
-                <h5 className={this.titleColor}>Smart Contracts 4 E-Gov</h5>
-                <p className="teal-text text-lighten-4">...</p>
-                <h5 className={this.titleColor}>Research Group</h5>
-                <p className="teal-text text-lighten-4">LIF (UESC)</p>
+              <div className="col l4 s12">
+                <h5 className={this.titleColor}>{lang.PROJECT_TITLE}</h5>
+                <p className="teal-text text-lighten-4">
+                  {lang.PROJECT_ABOUT_SUMMARY}
+                </p>
+                <h5 className={this.titleColor}>{lang.RESEARCH_GROUP}</h5>
+                <p className="teal-text text-lighten-4">
+                  {lang.RESEARCH_GROUP_NAME}
+                </p>
               </div>
               {/* Right Side */}
-              <div className="col l5 s12 offset-l1">
+              <div className="col l7 offset-l1 s12">
                 {/* Team */}
-                <h5 className={this.titleColor}>Team</h5>
-                {/* Researchers */}
-                <div className="col l6">
-                  <h6 className={this.titleColor}>Researchers</h6>
-                  <p>
-                    <a
-                      className="teal-text text-lighten-4"
-                      style={{ textDecoration: "underline" }}
-                      href="https://www.linkedin.com/in/jauberth-abijaude-8a994bb3/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Jauberth Abijaude
-                    </a>
-                  </p>
-                </div>
-                {/* Students */}
-                <div className="col l5 offset-l1">
-                  <h6 className={this.titleColor}>Students</h6>
-                  <p>
-                    <a
-                      className="teal-text text-lighten-4"
-                      style={{ textDecoration: "underline" }}
-                      href="https://www.linkedin.com/in/levy-santiago-88a807162/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Levy Santiago
-                    </a>
-                  </p>
-                </div>
+                <h5 className={this.titleColor}>{lang.TEAM}</h5>
+                {/* Authors */}
+                <TeamCard
+                  imgName="jauberth_abijaude.jpg"
+                  title="Jauberth Abijaude"
+                  content="Professor do Curso de Ciência da Computação"
+                  link="https://www.linkedin.com/in/jauberth-abijaude-8a994bb3/"
+                />
+                <TeamCard
+                  imgName="levy_santiago.jpg"
+                  title="Levy Santiago"
+                  content="Estudante do Curso de Ciência da Computação"
+                  link="https://www.linkedin.com/in/levy-santiago-88a807162/"
+                />
               </div>
 
               {/* Final Messages */}
-              <div className="col s12 center" style={{ marginTop: "50px" }}>
-                <p className="teal-text text-lighten-4">message</p>
+              <div className="col s6 offset-s3" style={{ marginTop: "50px" }}>
+                <p className="teal-text text-lighten-4 center-align">
+                  {lang.FOOTER_LAST_MESSAGE}
+                </p>
               </div>
             </div>
           </div>

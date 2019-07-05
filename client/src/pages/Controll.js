@@ -327,7 +327,7 @@ class Controll extends Component {
         />
         {this.getBodyContent()}
 
-        <Footer />
+        <Footer lang={lang} />
       </div>
     );
   }
