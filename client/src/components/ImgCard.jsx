@@ -1,29 +1,8 @@
 import React, { Component } from "react";
 
 class ImgCard extends Component {
-  /*getLinkComponent() {
-    const { link, linkName } = this.props;
-    if (link && linkName) {
-      return (
-        <div className="card-action">
-          <a
-            href={link}
-            className=""
-            target="_blank"
-            rel="noopener noreferrer"
-            style={this.imgLinkStyle}
-          >
-            {linkName}
-          </a>
-        </div>
-      );
-    } else {
-      return <div className="card-action teal-text text-darken-2">{"."}</div>;
-    }
-  }*/
-
   render() {
-    const { imgPath, link, alt, linkColor } = this.props;
+    const { imgPath, link, alt, linkColor, linkName } = this.props;
     return (
       <div className="col s12 m4">
         <div className="card">
@@ -37,7 +16,7 @@ class ImgCard extends Component {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Mais
+              {linkName}
             </a>
           </div>
         </div>
