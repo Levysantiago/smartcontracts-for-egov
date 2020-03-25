@@ -13,6 +13,7 @@ class Tools extends Component {
             link={image.link}
             alt={image.alt}
             linkColor={linkColor}
+            linkName={image.linkName}
           />
         ))}
       </div>
