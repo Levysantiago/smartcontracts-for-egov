@@ -25,7 +25,7 @@ All the dependences are listed on package.json file, here they are:
 
 # Frameworks
 
-- [Express.js](https://expressjs.com/): An Node.js web application to create APIs;
+- [Express.js](https://expressjs.com/): An Node.js web application to create REST APIs;
 - [Web3.js](https://web3js.readthedocs.io/en/1.0/web3-eth-contract.html): Framework to connect to Ethereum network;
 - [Mocha.js](https://mochajs.org/): A framework for testing;
 - [Ganache-cli](https://github.com/trufflesuite/ganache-cli/blob/master/README.md): A framework which creates local Ethereum accounts for testing;
