@@ -103,37 +103,60 @@ class Home extends Component {
         id: 1,
         filename: "nodejs.jpg",
         link: "https://nodejs.org",
-        alt: lang.IMG_ALT_NODE
+        alt: lang.IMG_ALT_NODE,
+        linkName: lang.LINK_NAME
       },
       {
         id: 2,
         filename: "react.jpg",
         link: "https://pt-br.reactjs.org/",
-        alt: lang.IMG_ALT_REACT
+        alt: lang.IMG_ALT_REACT,
+        linkName: lang.LINK_NAME
       },
       {
         id: 3,
         filename: "ethereum.jpg",
         link: "https://www.ethereum.org/",
-        alt: lang.IMG_ALT_ETHEREUM
+        alt: lang.IMG_ALT_ETHEREUM,
+        linkName: lang.LINK_NAME
       },
       {
         id: 4,
         filename: "metamask.jpg",
         link: "https://metamask.io/",
-        alt: lang.IMG_ALT_METAMASK
+        alt: lang.IMG_ALT_METAMASK,
+        linkName: lang.LINK_NAME
       },
       {
         id: 5,
         filename: "github.jpg",
         link: "https://github.com",
-        alt: lang.IMG_ALT_GITHUB
+        alt: lang.IMG_ALT_GITHUB,
+        linkName: lang.LINK_NAME
       },
       {
         id: 6,
         filename: "web3.jpg",
         link: "https://web3js.readthedocs.io",
-        alt: lang.IMG_ALT_WEB3
+        alt: lang.IMG_ALT_WEB3,
+        linkName: lang.LINK_NAME
+      }
+    ];
+
+    let thanks = [
+      {
+        id: 1,
+        filename: "uesc.jpg",
+        link: "http://www.uesc.br",
+        alt: lang.IMG_ALT_NODE,
+        linkName: lang.LINK_NAME
+      },
+      {
+        id: 2,
+        filename: "nbcgib.jpg",
+        link: "http://nbcgib.uesc.br/",
+        alt: lang.IMG_ALT_REACT,
+        linkName: lang.LINK_NAME
       }
     ];
 
@@ -156,9 +179,14 @@ class Home extends Component {
       },
       {
         id: 4,
-        title: "Ferramentas",
+        title: lang.HOME_TOOLS_TITLE,
         tag: <Tools linkColor={colors.CARD_LINK} images={images} />,
         typed: true
+      },
+      {
+        id: 5,
+        title: lang.HOME_THANKS_TITLE,
+        tag: <Tools linkColor={colors.CARD_LINK} images={thanks} />
       }
     ];
 
@@ -206,6 +234,10 @@ class Home extends Component {
           onLanguageChange={this.changeLanguage}
           lang={lang}
         />
+
+        <div className="center hide-on-small-only">
+          <img src={require("../images/blockegovme.png")} alt={"logo"} />
+        </div>
 
         <Contents contents={contents} />
 
