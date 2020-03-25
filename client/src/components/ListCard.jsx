@@ -15,7 +15,7 @@ class ListCard extends Component {
     let i = 0;
     return (
       <div className="col s12 m6">
-        <div className="card white large">
+        <div className="card white large" style={{ height: 511 }}>
           <div className="card-content black-text">
             <span className="card-title">{title}</span>
             <div style={scrolled}>
