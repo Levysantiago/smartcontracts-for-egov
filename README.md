@@ -6,7 +6,7 @@ This project is build for the [UESC (Universidade Estadual de Santa Cruz)](http:
 
 ## Project Stage
 
-The project is in the **Development** stage.
+The project is in **Testing** stage.
 
 # Versions
 
