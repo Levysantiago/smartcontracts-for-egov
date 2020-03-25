@@ -10,6 +10,26 @@ const enrollmentproof = require("../ethereum/instances/enrollmentproof");
 
 const { MTMSK_ACCOUNT, GAS } = process.env;
 
+/*
+Updates to JSON:
+{
+    "idm": "id",
+    "idt" "0000000000000000",
+    "tipo": "W",
+    "timestamp": "1519746632",
+    "community": "lif_egov",
+    "infos":{
+        "student": "0xaa2A138f487F4d367fa31Da09ccbbAE6cDaD8398",
+        "name": "Carlos",
+        "course": "CIC",
+        "ingress": "20151",
+        "period": "20191",
+        "shift": 3
+    }
+
+}
+*/
+
 // parse application/json
 app.use(bodyParser.json());
 
@@ -205,13 +225,19 @@ app.post("/enrollment/infoByStudent", async (req, res) => {
       });
     }
 
+    // Change this after
+    let shift = info["5"];
+    if (shift == 3) {
+      shift = "Integral";
+    }
+
     let json = {
       student: info["0"],
       name: info["1"],
       course: info["2"],
       ingress: info["3"],
       period: info["4"],
-      shift: info["5"],
+      shift: shift,
       subjects: subjectsList,
       contractAddress: address,
       creatorAddress: creator_address
