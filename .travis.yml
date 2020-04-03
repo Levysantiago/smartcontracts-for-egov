@@ -10,4 +10,4 @@ install:
   - cd server && npm install
 script:
   - npm run compile
-  - adonis test
+  - npm test
