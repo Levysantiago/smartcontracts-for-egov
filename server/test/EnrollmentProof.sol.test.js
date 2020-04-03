@@ -32,9 +32,7 @@ describe("EnrollmentProofController", () => {
   it("Deploy a contract", async () => {
     assert.ok(Number(await web3.eth.getBalance(creator)) < creatorBalance);
   });
-});
 
-describe("Inbox", () => {
   it("Testing address", () => {
     assert.equal(contractController.options.address, c_address);
   });
