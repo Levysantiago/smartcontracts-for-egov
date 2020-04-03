@@ -1,0 +1,13 @@
+language: node.js
+node.js:
+  - v10.15.3
+npm:
+  - 6.4.1
+sudo: false
+notifications:
+  - email: false
+install:
+  - cd server && npm install
+script:
+  - npm run compile
+  - adonis test

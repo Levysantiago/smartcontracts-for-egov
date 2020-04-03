@@ -19,7 +19,8 @@
   "scripts": {
     "server": "node ./src/app.js",
     "compile": "node ethereum/compileAll.js",
-    "deploy": "node ethereum/deploy.js"
+    "deploy": "node ethereum/deploy.js",
+    "test": "mocha"
   },
   "eslintConfig": {
     "extends": "react-app"
